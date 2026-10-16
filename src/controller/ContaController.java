@@ -39,12 +39,30 @@ public class ContaController {
 
     // 4. UPDATE - Atualizar dados da conta
     public Conta atualizarConta(Long id, Conta contaAtualizada) {
-        // Lógica de atualização
-        return contaAtualizada;
+        for (int i = 0; i < contas.size(); i++) {
+            Conta contaExistente = contas.get(i);
+            if (contaExistente.getId() != null && contaExistente.getId().equals(id)){
+                // Atualiza os dados da conta encontrada
+                if (contaAtualizada.getNomeTitular() != null){
+                    contaExistente.setNomeTitular(contaAtualizada.getNomeTitular());
+                }
+                if (contaAtualizada.getDocumento() != null){
+                    contaExistente.setDocumento(contaAtualizada.getDocumento());
+                }
+                return contaExistente; // Retorna a conta com os dados atualizados
+            }
+        }
+        return null; // Caso a conta não seja encontrada para atualização
     }
     // 5. DELETE - Excluir uma conta
     public Boolean deletarConta(Long id) {
-        // Lógica de remoção
-        return true;
+        for (int i = 0; i < contas.size(); i++) {
+            Conta conta = contas.get(i);
+            if (conta.getId() != null && conta.getId().equals(id)){
+                contas.remove(i); // Remove a conta da lista
+                return true; // Sucesso na exclusão
+            }
+        }
+        return false; // Retorna falso se não encontrou a conta para deletar
     }
 }
