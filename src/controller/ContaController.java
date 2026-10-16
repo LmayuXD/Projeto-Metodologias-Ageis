@@ -9,8 +9,17 @@ public class ContaController {
     // Lista temporária em memória para simular o banco de dados por enquanto
     private List<Conta> contas = new ArrayList<>();
 
-    // 1. CREATE - Cadastrar uma nova conta
+    // 1. CREATE - Cadastrar uma nova conta com validação de dados obrigatórios
     public Conta criarConta(Conta novaConta){
+        // Validação: Verifica se o nome do titular está vazio ou nulo
+        if(novaConta.getNomeTitular() == null || novaConta.getNomeTitular().trim().isEmpty()){
+            throw new IllegalArgumentException("O nome do titular é obrigatório!");
+        }
+
+        // Validação: Verifica se o documento está vazio ou nulo
+        if(novaConta.getDocumento() == null || novaConta.getDocumento().trim().isEmpty()){
+            throw new IllegalArgumentException("O documento (CPF/CNPJ) é obrigatório!");
+        }
 
         // Garante que haja um saldo pré-configurado se ele tiver vazio
         if(novaConta.getSaldo() == null){
