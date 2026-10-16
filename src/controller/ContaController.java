@@ -11,6 +11,12 @@ public class ContaController {
 
     // 1. CREATE - Cadastrar uma nova conta
     public Conta criarConta(Conta novaConta){
+
+        // Garante que haja um saldo pré-configurado se ele tiver vazio
+        if(novaConta.getSaldo() == null){
+            novaConta.setSaldo(0.00);
+        }
+
         contas.add(novaConta);
         return novaConta;
     }
