@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+    //ESPERAR TATESUJI CRIAR A CONTA, PARA PODER COLOCAR AS INFORMAÇOES DO CONTAS.JAVA
   const [contas, setContas] = useState([
     {
       id: 1,
@@ -11,11 +12,13 @@ function App() {
     }
   ]);
 
+//DECLARAÇAO DE CONSTANTES / VARIAVEIS PARA PEGAR NOMES E INFORMAÇOES
   const [nome, setNome] = useState("");
   const [documento, setDocumento] = useState("");
   const [mensagem, setMensagem] = useState("");
   const [tipoMensagem, setTipoMensagem] = useState("");
 
+//FUNCAO DE CADASTRO
   function cadastrarConta(event) {
     event.preventDefault();
 
@@ -56,18 +59,27 @@ function App() {
     setTipoMensagem("sucesso");
   }
 
+        {/*EXIBE AS MENSAGENS NO CONSOLE*/}
   return (
     <main className="pagina">
+
       <header className="cabecalho">
         <h1>NekoPay</h1>
         <p>Gerenciamento de contas</p>
       </header>
 
       <section className="conteudo">
+
+           {/*FORMULARIO DE ABRIR CONTA NO BANCO*/}
+
         <div className="formulario">
           <h2>Abrir conta</h2>
 
+            {/*CRIAÇAO DO FORMULARIO*/}
+
           <form onSubmit={cadastrarConta}>
+
+              {/*PEDE O NOME*/}
             <label htmlFor="nome">Nome do titular</label>
             <input
               id="nome"
@@ -76,7 +88,7 @@ function App() {
               value={nome}
               onChange={(event) => setNome(event.target.value)}
             />
-
+               {/*PEDE O DOCUMENTO*/}
             <label htmlFor="documento">CPF ou CNPJ</label>
             <input
               id="documento"
@@ -85,11 +97,12 @@ function App() {
               value={documento}
               onChange={(event) => setDocumento(event.target.value)}
             />
+                {/*LITERALMENTE UM BOTAO*/}
 
             <button type="submit">
               Cadastrar conta
             </button>
-          </form>
+          </form> {/*FIM DO FORMS*/}
 
           {/* Exibe mensagem (sucesso, erro) ao criar conta */}
           {mensagem && (
@@ -97,15 +110,15 @@ function App() {
               {mensagem}
             </p>
           )}
-        </div>
+        </div> {/*FECHA A PRIMEIRA DIV DO FORMULARIO*/}
 
-        <section className="secao-contas">
+        <section className="secao-contas"> {/*SEGUNDA SEÇAO DE CONTAS*/}
           <h2>Contas cadastradas</h2>
 
-          {contas.length === 0 ? (
+          {contas.length === 0 ? ( //VERIFICA SE A QUANTIDADE DA ARAY CONTA É IGUAL A 0, SE FOR T = NENHUMA CONTA CADASTRADA
             <p>Nenhuma conta cadastrada.</p>
           ) : (
-            <div className="lista-contas">
+            <div className="lista-contas">  {/*SE FOR F = MOSTRA O CARD DA CONTA COM INFORMAÇOES*/}
               {contas.map((conta) => (
                 <article
                   className="cartao-conta"
@@ -126,7 +139,7 @@ function App() {
                     })}
                   </p>
 
-                  <button
+                  <button //BOTAO NAO FUNCIONAL (AINDA)
                     type="button"
                     onClick={() => excluirConta(conta.id)}
                   >
