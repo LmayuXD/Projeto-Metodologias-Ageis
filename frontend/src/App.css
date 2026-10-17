@@ -1,56 +1,156 @@
+/* Estilos específicos da aplicação NekoPay */
 
 .pagina {
-  min-height: 100vh;
-  background-color: #f5f0f5;
-  font-family: Arial, sans-serif;
-  color: #29212e;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 32px;
+  box-sizing: border-box;
+  text-align: left;
+
+  @media (max-width: 1024px) {
+    padding: 20px;
+  }
 }
 
 .cabecalho {
-  background-color: #820ad1;
-  color: white;
-  padding: 25px 40px;
-}
-
-.cabecalho h1 {
-  margin: 0;
-}
-
-.cabecalho p {
-  margin-bottom: 0;
+  margin-bottom: 32px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 24px;
 }
 
 .conteudo {
-  padding: 30px 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formulario {
+  background: var(--code-bg);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-h);
+  }
+
+  input {
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-h);
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus {
+      border-color: var(--accent);
+    }
+  }
+
+  button[type="submit"] {
+    margin-top: 8px;
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+.mensagem {
+  margin-top: 16px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+
+  &.sucesso {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  &.erro {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+}
+
+.secao-contas {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .lista-contas {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .cartao-conta {
-  background-color: white;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
   padding: 20px;
-  border-radius: 12px;
-  width: 280px;
-  box-shadow: 0 2px 8px #00000015;
-}
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow);
 
-.cartao-conta h3 {
-  margin-top: 0;
-}
+  h3 {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+  }
 
-.cartao-conta button {
-  background-color: #820ad1;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
+  p {
+    font-size: 15px;
+  }
 
-.cartao-conta button:hover {
-  background-color: #6500a8;
+  button {
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+  }
 }
