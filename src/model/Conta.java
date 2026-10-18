@@ -1,6 +1,7 @@
 package model;
 
 public class Conta {
+
     private Long id;
     private String nomeTitular;
     private String documento;
@@ -79,4 +80,5 @@ public class Conta {
             throw new IllegalArgumentException("O saldo não pode ser negativo!");
         }
     }
+
 }
