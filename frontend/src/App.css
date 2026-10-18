@@ -1,0 +1,181 @@
+.pagina {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 32px;
+  box-sizing: border-box;
+  text-align: left;
+
+  @media (max-width: 1024px) {
+    padding: 20px;
+  }
+}
+
+.cabecalho {
+  margin-bottom: 32px;
+  text-align: center;
+  border-bottom: 2px dashed var(--neko-gold);
+  padding-bottom: 24px;
+  background: linear-gradient(to bottom, rgba(243, 196, 83, 0.1), transparent);
+  border-radius: 12px 12px 0 0;
+  padding-top: 16px;
+
+  .subtitulo-kanji {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--neko-olive);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+}
+
+.conteudo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formulario {
+  background: var(--surface);
+  padding: 28px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--neko-dark);
+  }
+
+  input {
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--neko-dark);
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+      border-color: var(--neko-red);
+      box-shadow: 0 0 0 3px rgba(151, 39, 27, 0.15);
+    }
+  }
+
+  button[type="submit"] {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 8px;
+    border: none;
+    background: var(--neko-red);
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 4px 10px rgba(151, 39, 27, 0.3);
+
+    &:hover {
+      background: #7a1f15;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+.mensagem {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+
+  &.sucesso {
+    background: rgba(155, 149, 91, 0.2);
+    color: #4c4728;
+    border: 1px solid var(--neko-olive);
+  }
+
+  &.erro {
+    background: rgba(151, 39, 27, 0.1);
+    color: var(--neko-red);
+    border: 1px solid rgba(151, 39, 27, 0.3);
+  }
+}
+
+.secao-contas {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lista-contas {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.cartao-conta {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--neko-gold);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  h3 {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    color: var(--neko-dark);
+  }
+
+  p {
+    font-size: 15px;
+    color: var(--neko-dark);
+  }
+
+  button {
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid rgba(151, 39, 27, 0.3);
+    background: transparent;
+    color: var(--neko-red);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(151, 39, 27, 0.1);
+    }
+  }
+}
