@@ -5,12 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContaController {
+//cadastro, consulta de perfil e saldo
+
 
     // Lista temporária em memória para simular o banco de dados por enquanto
     private List<Conta> contas = new ArrayList<>();
 
+    //-->
+    private static final double saldoInicial = 500.00;
+
+
     // 1. CREATE - Cadastrar uma nova conta com validação de dados obrigatórios
-    public Conta criarConta(Conta novaConta){
+    public Conta criarConta(String nomeTitular, String documento){
+
         // Validação: Verifica se o nome do titular está vazio ou nulo
         if(novaConta.getNomeTitular() == null || novaConta.getNomeTitular().trim().isEmpty()){
             throw new IllegalArgumentException("O nome do titular é obrigatório!");

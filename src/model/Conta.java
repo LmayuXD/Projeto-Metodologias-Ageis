@@ -1,17 +1,17 @@
 package model;
 
 public class Conta {
-
+//recebe dados da conta como ID, nome, documento e saldo
     private Long id;
     private String nomeTitular;
     private String documento;
     private double saldo;
 
     public Conta(Long id, String nomeTitular, String documento, double saldo) {
-        this.id = id;
-        this.nomeTitular = nomeTitular;
-        this.documento = documento;
-        this.saldo = saldo;
+        setId(id);
+        setNomeTitular(nomeTitular);
+        setDocumento(documento);
+        setSaldo(saldo);
     }
 
     public Long getId() {

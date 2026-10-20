@@ -2,15 +2,7 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-    //ESPERAR TATESUJI CRIAR A CONTA, PARA PODER COLOCAR AS INFORMAÇOES DO CONTAS.JAVA
-  const [contas, setContas] = useState([
-    {
-      id: 1,
-      nomeTitular: "Ana Silva",
-      documento: "123.456.789-00",
-      saldo: 500.00
-    }
-  ]);
+
 
 //DECLARAÇAO DE CONSTANTES / VARIAVEIS PARA PEGAR NOMES E INFORMAÇOES
   const [nome, setNome] = useState("");
@@ -29,12 +21,10 @@ function App() {
       return;
     }
 
-    // Cria uma nova conta seguindo a estrutura padrão
+    // Cria uma conta seguindo a estrutura padrão
     const novaConta = {
-      id: Date.now(),
       nomeTitular: nome.trim(),
       documento: documento.trim(),
-      saldo: 0
     };
 
     // Adiciona a conta à lista
