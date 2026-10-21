@@ -5,7 +5,7 @@ public class Conta {
     private Long id;
     private String nomeTitular;
     private String documento;
-    private double saldo;
+    private double saldo = 500.00;
 
     public Conta(Long id, String nomeTitular, String documento, double saldo) {
         setId(id);
@@ -80,5 +80,4 @@ public class Conta {
             throw new IllegalArgumentException("O saldo não pode ser negativo!");
         }
     }
-
 }
