@@ -1,7 +1,10 @@
+<<<<<<< HEAD
+=======
+import { useState } from "react";
+>>>>>>> ce7255fdc0e625b86bf8befef459436e82f09527
 import "./App.css";
 
 function App() {
-
 //FUNCAO DE CADASTRO
   function cadastrarConta(event) {
     event.preventDefault();
@@ -14,7 +17,6 @@ function App() {
     }
 
     // Cria uma conta seguindo a estrutura padrão
-    @
     const novaConta = {
       nomeTitular: nome.trim(),
       documento: documento.trim(),
