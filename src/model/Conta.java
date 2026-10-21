@@ -1,17 +1,18 @@
 package model;
 
 public class Conta {
-//recebe dados da conta como ID, nome, documento e saldo
+
+    // recebe dados da conta como ID, nome, documento e saldo
     private Long id;
     private String nomeTitular;
     private String documento;
-    private double saldo = 500.00;
+    private double saldoInicial = 500.00;
 
-    public Conta(Long id, String nomeTitular, String documento, double saldo) {
+    //não é necessário ter saldo no construtor, já que o usuário não pode editar o saldo, e terá um saldo inicial de 500
+    public Conta(Long id, String nomeTitular, String documento) {
         setId(id);
         setNomeTitular(nomeTitular);
         setDocumento(documento);
-        setSaldo(saldo);
     }
 
     public Long getId() {
@@ -40,6 +41,7 @@ public class Conta {
         if (nome.length() < 3) {
             throw new IllegalArgumentException("O nome deve ter pelo menos 3 caracteres!");
         }
+
         if (!nome.matches("[\\p{L} ]+")) {
             throw new IllegalArgumentException("O nome deve conter apenas letras e espaços!");
         }
@@ -56,12 +58,13 @@ public class Conta {
             throw new IllegalArgumentException("O documento (CPF/CNPJ) é obrigatório!");
         }
 
-        // tira pontos, traço, barra e espaços para contar só os dígitos
+        // tira pontos, traço, barra e espaços
         String apenasDigitos = documento.replaceAll("[.\\-/\\s]", "");
 
         if (!apenasDigitos.matches("\\d+")) {
             throw new IllegalArgumentException("O documento deve conter apenas números!");
         }
+
         if (apenasDigitos.length() != 11 && apenasDigitos.length() != 14) {
             throw new IllegalArgumentException("CPF deve ter 11 dígitos e CNPJ deve ter 14!");
         }
@@ -74,7 +77,7 @@ public class Conta {
     }
 
     public void setSaldo(double saldo) {
-        if (saldo > 0) {
+        if (saldo >= 0) {
             this.saldo = saldo;
         } else {
             throw new IllegalArgumentException("O saldo não pode ser negativo!");
