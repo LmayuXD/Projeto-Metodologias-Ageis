@@ -6,7 +6,7 @@ public class Conta {
     private Long id;
     private String nomeTitular;
     private String documento;
-    private double saldo = 500.00;
+    private double saldoInicial = 500.00;
 
     //não é necessário ter saldo no construtor, já que o usuário não pode editar o saldo, e terá um saldo inicial de 500
     public Conta(Long id, String nomeTitular, String documento) {
@@ -72,13 +72,13 @@ public class Conta {
         this.documento = documento.trim();
     }
 
-    public double getSaldo() {
-        return saldo;
+    public double getSaldoInicial() {
+        return saldoInicial;
     }
 
-    public void setSaldo(double saldo) {
-        if (saldo >= 0) {
-            this.saldo = saldo;
+    public void setSaldoInicial(double saldoInicial) {
+        if (saldoInicial >= 0) {
+            this.saldoInicial = saldoInicial;
         } else {
             throw new IllegalArgumentException("O saldo não pode ser negativo!");
         }
