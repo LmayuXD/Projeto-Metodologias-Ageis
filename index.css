@@ -1,0 +1,39 @@
+
+:root {
+  --creme: #e8dce8;
+  --dourado: #f3c453;
+  --terracota: #a8742b;
+  --vermelho: #97271b;
+  --verde-oliva: #9b955b;
+  --bege: #f3e2c9;
+  --rosa: #f4bfbe;
+  --marrom: #e8e5de;
+  --branco: #ffffff;
+}
+
+/* Fundo da página */
+
+/* Formas decorativas */
+
+/* Responsividade */
+
+@media (max-width: 480px) {
+  .cadastro-page {
+    padding: 20px 14px;
+  }
+
+  .cadastro-card {
+    padding: 28px 22px;
+    border-radius: 22px;
+  }
+
+  .cadastro-title {
+    font-size: 25px;
+  }
+
+  .logo-placeholder {
+    width: 90px;
+    height: 90px;
+  }
+}
+
