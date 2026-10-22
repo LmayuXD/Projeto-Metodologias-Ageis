@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 import { useState } from "react";
->>>>>>> ce7255fdc0e625b86bf8befef459436e82f09527
 import "./App.css";
 
 function App() {
