@@ -1,80 +1,39 @@
+
 :root {
-  /* Paleta de Cores Maneki-Neko / NekoPay */
-  --neko-red: #97271b;
-  --neko-gold: #f3c453;
-  --neko-cream: #fcf7e7;
-  --neko-sand: #f3e2c9;
-  --neko-olive: #9b955b;
-  --neko-pink: #f4bfbe;
-  --neko-dark: #584f43;
+  --creme: #e8dce8;
+  --dourado: #f3c453;
+  --terracota: #a8742b;
+  --vermelho: #97271b;
+  --verde-oliva: #9b955b;
+  --bege: #f3e2c9;
+  --rosa: #f4bfbe;
+  --marrom: #e8e5de;
+  --branco: #ffffff;
+}
 
-  /* Variáveis de Tema */
-  --bg: var(--neko-cream);
-  --surface: var(--neko-sand);
-  --text: var(--neko-dark);
-  --text-h: var(--neko-red);
-  --border: #e6dec5;
-  --accent: var(--neko-red);
-  --accent-hover: #7a1f15;
-  --shadow: rgba(88, 79, 67, 0.1) 0 10px 15px -3px, rgba(88, 79, 67, 0.05) 0 4px 6px -2px;
+/* Fundo da página */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+/* Formas decorativas */
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Responsividade */
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+@media (max-width: 480px) {
+  .cadastro-page {
+    padding: 20px 14px;
+  }
+
+  .cadastro-card {
+    padding: 28px 22px;
+    border-radius: 22px;
+  }
+
+  .cadastro-title {
+    font-size: 25px;
+  }
+
+  .logo-placeholder {
+    width: 90px;
+    height: 90px;
   }
 }
 
-body {
-  margin: 0;
-  background-color: var(--bg);
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  background-color: var(--bg);
-}
-
-h1, h2 {
-  font-family: var(--heading);
-  font-weight: 600;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 48px;
-  letter-spacing: -1px;
-  margin: 24px 0 8px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-h2 {
-  font-size: 22px;
-  margin: 0 0 16px 0;
-}
-
-p {
-  margin: 0;
-}

@@ -1,181 +1,282 @@
-.pagina {
+
+/* ============================
+   NEKOPAY - ESTILO PRINCIPAL
+   ============================ */
+
+:root {
+  --creme: #fcf7e7;
+  --dourado: #f3c453;
+  --terracota: #a8742b;
+  --vermelho: #97271b;
+  --verde-oliva: #9b955b;
+  --bege: #f3e2c9;
+  --rosa: #f4bfbe;
+  --marrom: #c47d20;
+  --branco: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Arial, sans-serif;
+
+  display: flex;
+  background-color: #fcf7e7;
+  justify-content: center;
+  align-items: center;
+
+}
+
+#seta-voltar {
+  text-decoration: none;
+  font-size: 50px;
+  font-weight: bolder;
+  line-height: 1;
+  display: inline-block;
+  color: #a8742b;
+}
+
+.cabecalho-cadastro{
+
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: auto;
+  padding: 0;
+  z-index: 10;
+
+
+}
+
+/* Fundo da página */
+
+.cadastro-page {
+  min-height: 100vh;
+  padding: 32px 20px;
+
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  padding: 32px;
-  box-sizing: border-box;
-  text-align: left;
 
-  @media (max-width: 1024px) {
-    padding: 20px;
-  }
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  overflow: hidden;
+
+  background-color: var(--creme);
 }
 
-.cabecalho {
-  margin-bottom: 32px;
-  text-align: center;
-  border-bottom: 2px dashed var(--neko-gold);
-  padding-bottom: 24px;
-  background: linear-gradient(to bottom, rgba(243, 196, 83, 0.1), transparent);
-  border-radius: 12px 12px 0 0;
-  padding-top: 16px;
 
-  .subtitulo-kanji {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--neko-olive);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
+/* Formas decorativas */
+
+
+/* Cartão de cadastro */
+
+
+
+/* Espaço da logo */
+
+
+/* Título e descrição */
+
+
+/* Formulário */
+
+.cadastro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
 }
 
-.conteudo {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-  align-items: start;
+/* Campos nomeTitular e documento */
 
-  @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
-  }
+form {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid #c47d20;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #f3e6c9 0%, #d3ad74 100%);
+  padding: 30px;
+  gap: 30px;
 }
 
-.formulario {
-  background: var(--surface);
-  padding: 28px;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
+.form-input {
+  width: 100%;
+  min-height: 49px;
+  padding: 14px 16px;
+  color: var(--marrom);
 
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 16px;
-  }
+  background-color: #fffdf8;
+  border: 1px solid #e5dccb;
 
-  label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--neko-dark);
-  }
-
-  input {
-    padding: 12px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: #fff;
-    color: var(--neko-dark);
-    font-size: 16px;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-
-    &:focus {
-      border-color: var(--neko-red);
-      box-shadow: 0 0 0 3px rgba(151, 39, 27, 0.15);
-    }
-  }
-
-  button[type="submit"] {
-    margin-top: 12px;
-    padding: 14px;
-    border-radius: 8px;
-    border: none;
-    background: var(--neko-red);
-    color: #fff;
-    font-weight: 600;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    box-shadow: 0 4px 10px rgba(151, 39, 27, 0.3);
-
-    &:hover {
-      background: #7a1f15;
-    }
-
-    &:active {
-      transform: scale(0.98);
-    }
-  }
+  border-radius: 14px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s ease,
+  box-shadow 0.2s ease;
 }
+
+.form-input::placeholder {
+  color: #aaa092;
+}
+
+.form-input:hover {
+  border-color: var(--verde-oliva);
+}
+
+.form-input:focus-visible {
+  border-color: var(--verde-oliva);
+  box-shadow: 0 0 0 3px rgba(155, 149, 91, 0.2);
+}
+
+/* Botão cadastrar */
+
+.btn-cadastrar {
+  width: 100%;
+  min-height: 51px;
+  margin-top: 5px;
+  padding: 14px 20px;
+  color: var(--branco);
+  background-color: var(--vermelho);
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background-color 0.2s ease,
+  transform 0.2s ease,
+  box-shadow 0.2s ease;
+}
+
+.btn-cadastrar:hover {
+  background-color: #7e2118;
+  box-shadow: 0 5px 14px rgba(151, 39, 27, 0.18);
+  transform: translateY(-1px);
+}
+
+.btn-cadastrar:active {
+  transform: translateY(0);
+}
+
+.btn-cadastrar:focus-visible {
+  outline: 3px solid var(--dourado);
+  outline-offset: 3px;
+}
+
+.btn-cadastrar:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+button{
+  background-color: var(--vermelho);
+  border: none;
+  color: #fcf7e7;
+}
+.botao-inicio{
+
+  width: 100%;
+  min-height: 51px;
+  margin-top: 5px;
+  padding: 14px 20px;
+  color: var(--vermelho);
+  background-color: var(--vermelho);
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background-color 0.2s ease,
+  transform 0.2s ease,
+  box-shadow 0.2s ease;
+}
+
+.botao-inicio:hover {
+  background-color: #7e2118;
+  box-shadow: 0 5px 14px rgba(151, 39, 27, 0.18);
+  transform: translateY(-1px);
+}
+
+.botao-inicio:active {
+  transform: translateY(0);
+}
+
+.botao-inicio:focus-visible {
+  outline: 3px solid var(--dourado);
+  outline-offset: 3px;
+}
+
+.botao-inicio:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Mensagem de retorno: msg e erro */
 
 .mensagem {
-  margin-top: 16px;
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-
-  &.sucesso {
-    background: rgba(155, 149, 91, 0.2);
-    color: #4c4728;
-    border: 1px solid var(--neko-olive);
-  }
-
-  &.erro {
-    background: rgba(151, 39, 27, 0.1);
-    color: var(--neko-red);
-    border: 1px solid rgba(151, 39, 27, 0.3);
-  }
+  margin: 20px 0 0;
+  padding: 13px 15px;
+  border-radius: 13px;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
-.secao-contas {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.mensagem-erro {
+  color: #85251d;
+  background-color: #fbe5e3;
+  border: 1px solid #f4bfbe;
 }
 
-.lista-contas {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-height: 520px;
-  overflow-y: auto;
-  padding-right: 4px;
+.mensagem-sucesso {
+  color: #4f6137;
+  background-color: #eef0df;
+  border: 1px solid #d9dfbd;
 }
 
-.cartao-conta {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 6px solid var(--neko-gold);
-  border-radius: 12px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  box-shadow: var(--shadow);
-  transition: transform 0.2s;
+/* Rodapé */
 
-  &:hover {
-    transform: translateY(-2px);
-  }
+.cadastro-footer {
+  margin: 24px 0 0;
+  color: #82796d;
+  text-align: center;
+  font-size: 12px;
 
-  h3 {
-    margin: 0 0 4px 0;
-    font-size: 18px;
-    color: var(--neko-dark);
-  }
-
-  p {
-    font-size: 15px;
-    color: var(--neko-dark);
-  }
-
-  button {
-    align-self: flex-start;
-    margin-top: 8px;
-    padding: 6px 14px;
-    border-radius: 6px;
-    border: 1px solid rgba(151, 39, 27, 0.3);
-    background: transparent;
-    color: var(--neko-red);
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 500;
-    transition: background 0.2s;
-
-    &:hover {
-      background: rgba(151, 39, 27, 0.1);
-    }
-  }
 }
+
+/* Responsividade */
+
+/*@media (max-width: 480px) {*/
+/*  .cadastro-page {*/
+/*    padding: 20px 14px;*/
+/*  }*/
+
+/*  .cadastro-card {*/
+/*    padding: 28px 22px;*/
+/*    border-radius: 22px;*/
+/*  }*/
+
+/*  .cadastro-title {*/
+/*    font-size: 25px;*/
+/*  }*/
+
+/*  .logo-placeholder {*/
+/*    width: 90px;*/
+/*    height: 90px;*/
+/*  }*/
+/*}*/
+
+/*!* Respeita preferência por menos animações *!*/
+
+/*@media (prefers-reduced-motion: reduce) {*/
+/*  *,*/
+/*  *::before,*/
+/*  *::after {*/
+/*    transition: none !important;*/
+/*  }*/
+/*}*/
