@@ -9,7 +9,7 @@ return (
        <h2> SEJA BEM-VINDO(A) </h2>
 
        <Link class="botao-inicio" to={"/cadastro"}>
-           <button>INICIO</button>
+           <button>Inciar em NekoPay</button>
        </Link>
 
        <footer class="cadastro-footer">

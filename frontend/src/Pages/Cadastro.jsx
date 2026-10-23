@@ -45,23 +45,29 @@ export default function Cadastro() {
             <header class=" cabecalho-cadastro ">
                 <a id="seta-voltar" href={"/"}> &lt; </a>
                 {/* imagem do nekopay*/}
+
             </header>
 
-            <form onSubmit={handleSubmit}>
-                <h2>Abrir conta NEKOPAY</h2>
+            <h2>Abrir conta </h2>
+            <p> Preencha os dados abaixo para abrir a sua conta NekoPay. </p>
 
+            <form onSubmit={handleSubmit}>
+
+
+             <label> Nome </label>
                 <input class="form-input"
+
                     name="nomeTitular"
                     placeholder="Nome completo"
                     value={form.nomeTitular}
                     onChange={handleChange}
-                />
-
+                    />
+                <label> nº Documento </label>
                 <input class="form-input"
-                    name="documento"
-                    placeholder="CPF ou CNPJ"
-                    value={form.documento}
-                    onChange={handleChange}
+                       name="documento"
+                       placeholder="CPF ou CNPJ"
+                       value={form.documento}
+                       onChange={handleChange}
                 />
 
                 <button class="btn-cadastrar" type="submit">Cadastrar</button>

@@ -13,6 +13,8 @@
   --rosa: #f4bfbe;
   --marrom: #c47d20;
   --branco: #ffffff;
+  --preto: #000000
+
 }
 
 * {
@@ -22,13 +24,25 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Segoe UI", Arial, sans-serif;
 
   display: flex;
   background-color: #fcf7e7;
   justify-content: center;
   align-items: center;
 
+}
+h2{
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #4f6137;
+  font-size: 35px;
+  margin-top: 0;
+  margin-bottom: 4px;
+  }
+
+p{
+  margin-top: 0;
+  margin-bottom: 100px;
+  font-family: "Sans Serif Collection"  ;
 }
 
 #seta-voltar {
@@ -49,7 +63,6 @@ body {
   padding: 0;
   z-index: 10;
 
-
 }
 
 /* Fundo da página */
@@ -61,14 +74,29 @@ body {
   display: flex;
   flex-direction: column;
 
-  align-items: center;
   justify-content: center;
 
   position: relative;
   overflow: hidden;
 
   background-color: var(--creme);
+
+
 }
+
+.cadastro-page label {
+  display: flex;
+  font-size: larger;
+
+  font-family: "Sans Serif Collection", serif;
+  flex-direction: column;
+
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  color: #4f6137;
+}
+
 
 
 /* Formas decorativas */
@@ -85,13 +113,6 @@ body {
 
 
 /* Formulário */
-
-.cadastro-form {
-  display: flex;
-  flex-direction: column;
-  gap: 19px;
-}
-
 /* Campos nomeTitular e documento */
 
 form {
@@ -100,13 +121,21 @@ form {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border: 1px solid #c47d20;
+
+  border: 2px solid #d9dfbd;
   border-radius: 20px;
-  background: linear-gradient(180deg, #f3e6c9 0%, #d3ad74 100%);
-  padding: 30px;
-  gap: 30px;
+
+  background-color: #fffdf8;
+  padding: 18px;
+  gap: 25px;
 }
 
+
+.cadastro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 .form-input {
   width: 100%;
   min-height: 49px;
@@ -146,7 +175,7 @@ form {
   color: var(--branco);
   background-color: var(--vermelho);
   border: none;
-  border-radius: 999px;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
   transition: background-color 0.2s ease,
@@ -179,6 +208,7 @@ button{
   border: none;
   color: #fcf7e7;
 }
+
 .botao-inicio{
 
   width: 100%;
@@ -194,6 +224,12 @@ button{
   transition: background-color 0.2s ease,
   transform 0.2s ease,
   box-shadow 0.2s ease;
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .botao-inicio:hover {
