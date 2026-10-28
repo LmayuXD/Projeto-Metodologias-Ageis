@@ -11,7 +11,7 @@ public class ContaController {
     private List<Conta> contas = new ArrayList<>();
 
     // saldo inicial padrão
-    //private static final double saldoInicial = 500.00;
+    private static final double saldoInicial = 500.00;
 
     // 1. CREATE - Cadastrar uma nova conta com validação de dados obrigatórios
     public Conta criarConta(String nomeTitular, String documento) {

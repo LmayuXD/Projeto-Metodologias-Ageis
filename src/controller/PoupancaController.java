@@ -36,7 +36,7 @@ public class PoupancaController {
     }
 
     public Poupanca resgatar(Long contaID, double valor) {
-        validarValor(contaID);
+        validarValor(valor);
         Conta conta = buscarConta(contaID);
         Poupanca caixinha = consultar(contaID);
 
