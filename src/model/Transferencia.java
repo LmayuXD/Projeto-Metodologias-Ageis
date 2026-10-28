@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * Registro de uma transação Pix no extrato.
+ * Esta classe só guarda dados; as regras de negócio ficam no TransferenciaController.
+ */
 public class Transferencia {
     private String id;
     private String chaveDestino;
@@ -68,29 +72,5 @@ public class Transferencia {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
-    }
-
-    public boolean realizarTransferencia(Conta contaOrigem, String chaveDestino, double valor) {
-        // Validação de saldo suficiente
-        if (contaOrigem.getSaldo() < valor) {
-            System.out.println("Erro: Saldo insuficiente para realizar a transferência.");
-            return false;
-        }
-
-        // Se tiver saldo, efetua a transação
-        contaOrigem.setSaldo(contaOrigem.getSaldo() - valor);
-
-        // Regista no extrato
-        Transferencia novaTransacao = new Transferencia(
-                java.util.UUID.randomUUID().toString(), // Cria um id exclusivo para a transação e converte para texto
-                chaveDestino,
-                valor,
-                java.time.LocalDateTime.now().toString() // Pega a data e a hora em que a transação foi feita e converte para texto
-                "Transferência Pix enviada",
-                "PIX_ENVIADO"
-        );
-
-        contaOrigem.getExtrato().add(novaTransacao);
-        return true;
     }
 }
