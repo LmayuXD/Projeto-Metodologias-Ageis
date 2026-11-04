@@ -53,7 +53,7 @@ public class TransferenciaController {
             throw new IllegalArgumentException("Não é possível transferir para a própria conta!");
         }
 
-        if (origem.getSaldo() < valor) {
+        if (origem.getSaldoInicial() < valor) {
             throw new IllegalArgumentException("Saldo insuficiente para realizar a transferência!");
         }
 
@@ -74,7 +74,8 @@ public class TransferenciaController {
                 PIX_RECEBIDO
         );
 
-        // 5) Só agora mexe nos saldos e nos extratos (tudo ou nada)
+        // 5) Só agora mexe nos saldos e nos extratos
+        // Lógica de tranferencia final
         origem.debitar(valor);
         destino.creditar(valor);
         origem.getExtrato().add(registroEnviado);

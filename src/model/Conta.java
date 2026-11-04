@@ -8,6 +8,8 @@ public class Conta {
     private String documento;
     private double saldoInicial = 500.00;
 
+    private java.util.List<Transferencia> extrato = new java.util.ArrayList<>(); // Utilizado para a lista do extrato de tranferências
+
     //não é necessário ter saldo no construtor, já que o usuário não pode editar o saldo, e terá um saldo inicial de 500
     public Conta(Long id, String nomeTitular, String documento) {
         setId(id);
@@ -82,5 +84,21 @@ public class Conta {
         } else {
             throw new IllegalArgumentException("O saldo não pode ser negativo!");
         }
+    }
+
+    // Métodos utilizados pela classe de tranfência
+    public void debitar(double valor) {
+        if (valor > saldoInicial) {
+            throw new IllegalArgumentException("Saldo insuficiente!");
+        }
+        this.saldoInicial -= valor;
+    }
+
+    public void creditar(double valor) {
+        this.saldoInicial += valor;
+    }
+
+    public java.util.List<Transferencia> getExtrato() {
+        return extrato;
     }
 }
