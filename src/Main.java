@@ -1,20 +1,20 @@
+import server.Servidor;
+import tests.TesteServidor;
+
 public class Main {
     //inicializa e testa o backend
 
-     import com.sun.net.httpserver.HttpServer;
-     import java.net.InetSocketAddress;
-     import controller.ContaController;
-     import controller.PoupancaController;
-     import controller.TransferenciaController;
-
-     //import controller.ContaHandler;
-
-    public class Main {
-        public static void main(String[] args) throws Exception {
-            HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
-            server.createContext("/api/contas", new ContaController());
-            server.start();
-            System.out.println("Servidor rodando em http://localhost:8080");
+    public static void main(String[] args) throws Exception {
+        Servidor.main(new String[0]);   // sobe o servidor (a porta 8080 precisa estar livre)
+        try {
+            TesteServidor.testeCors();
+            TesteServidor.testeContas();
+            TesteServidor.testePoupanca();
+        } catch (Exception e) {
+            TesteServidor.falhas++;
+            System.out.println("[ERRO]   o teste parou por uma exceção: " + e);
         }
+        System.out.println("\n==== " + TesteServidor.ok + " OK | " + TesteServidor.falhas + " FALHAS ====");
+        System.exit(TesteServidor.falhas > 0 ? 1 : 0);   // encerra também o servidor, mesmo com erro
     }
 }
