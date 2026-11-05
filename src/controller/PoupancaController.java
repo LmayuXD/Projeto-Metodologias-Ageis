@@ -26,56 +26,48 @@ public class PoupancaController {
 
     public Poupanca guardar(Long contaID, double valor) {
 
-        // valida o valor antes de alterar qualquer saldo
         validarValor(valor);
 
         Conta conta = buscarConta(contaID);
         Poupanca caixinha = consultar(contaID);
 
-        double saldoConta = arredondar(conta.getSaldoInicial());
-        double valorArredondado = arredondar(valor);
+        double saldo = arredondar(conta.getSaldoInicial());
+        double valorValido = arredondar(valor);
 
-        // verifica se a conta possui saldo suficiente
-        if (saldoConta < valorArredondado) {
+        if (saldo < valorValido) {
             throw new IllegalArgumentException(
                     "Saldo insuficiente na conta!"
             );
         }
 
-        // tira o dinheiro da conta
         conta.setSaldoInicial(
-                arredondar(saldoConta - valorArredondado)
+                arredondar(saldo - valorValido)
         );
 
-        // coloca o dinheiro na caixinha
-        caixinha.depositar(valorArredondado);
+        caixinha.depositar(valorValido);
 
         return caixinha;
     }
 
     public Poupanca resgatar(Long contaID, double valor) {
 
-        // valida o valor antes de alterar qualquer saldo
         validarValor(valor);
 
         Conta conta = buscarConta(contaID);
         Poupanca caixinha = consultar(contaID);
 
-        double valorArredondado = arredondar(valor);
+        double valorValido = arredondar(valor);
 
-        // verifica se a caixinha possui saldo suficiente
-        if (caixinha.getSaldo() < valorArredondado) {
+        if (caixinha.getSaldo() < valorValido) {
             throw new IllegalArgumentException(
                     "Saldo insuficiente na poupança!"
             );
         }
 
-        // tira o dinheiro da caixinha
-        caixinha.sacar(valorArredondado);
+        caixinha.sacar(valorValido);
 
-        // devolve o dinheiro para a conta
         conta.setSaldoInicial(
-                arredondar(conta.getSaldoInicial() + valorArredondado)
+                arredondar(conta.getSaldoInicial() + valorValido)
         );
 
         return caixinha;
@@ -96,24 +88,36 @@ public class PoupancaController {
 
     private void validarValor(double valor) {
 
-        // rejeita valores negativos, zero, NaN e infinito
-        if (!Double.isFinite(valor) || valor <= 0) {
+        // rejeita NaN e infinito
+        if (!Double.isFinite(valor)) {
+            throw new IllegalArgumentException(
+                    "Valor inválido."
+            );
+        }
+
+        // rejeita zero e valores negativos
+        if (valor <= 0) {
             throw new IllegalArgumentException(
                     "O valor deve ser maior que zero."
             );
         }
 
-        BigDecimal quantia = BigDecimal.valueOf(valor);
+        BigDecimal valorDecimal = BigDecimal.valueOf(valor);
 
         // rejeita valores menores que R$ 0,01
-        if (quantia.compareTo(BigDecimal.valueOf(0.01)) < 0) {
+        if (valorDecimal.compareTo(
+                BigDecimal.valueOf(0.01)
+        ) < 0) {
             throw new IllegalArgumentException(
                     "O valor mínimo é R$ 0,01."
             );
         }
 
-        // rejeita valores com mais de duas casas decimais
-        if (quantia.scale() > 2) {
+        // verifica se o valor possui mais de duas casas
+        BigDecimal valorComDuasCasas =
+                valorDecimal.setScale(2, RoundingMode.DOWN);
+
+        if (valorDecimal.compareTo(valorComDuasCasas) != 0) {
             throw new IllegalArgumentException(
                     "O valor deve possuir no máximo duas casas decimais."
             );
