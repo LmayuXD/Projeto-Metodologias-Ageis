@@ -1,3 +1,4 @@
+
 package controller;
 
 import model.Conta;
@@ -5,8 +6,10 @@ import model.Poupanca;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-//guardar e resgatar dinheiro
+// guardar e resgatar dinheiro
 
 public class PoupancaController {
     private final ContaController contaController;
@@ -23,13 +26,16 @@ public class PoupancaController {
 
     public Poupanca guardar(Long contaID, double valor) {
         validarValor(valor);
+        valor = arredondar(valor);
+
         Conta conta = buscarConta(contaID);
         Poupanca caixinha = consultar(contaID);
 
-        if(conta.getSaldoInicial() < valor) {
+        if (arredondar(conta.getSaldoInicial()) < valor) {
             throw new IllegalArgumentException("Saldo insuficiente na conta!");
         }
-        conta.setSaldoInicial(conta.getSaldoInicial() - valor);
+
+        conta.setSaldoInicial(arredondar(conta.getSaldoInicial() - valor));
         caixinha.depositar(valor);
 
         return caixinha;
@@ -37,26 +43,35 @@ public class PoupancaController {
 
     public Poupanca resgatar(Long contaID, double valor) {
         validarValor(valor);
+        valor = arredondar(valor);
+
         Conta conta = buscarConta(contaID);
         Poupanca caixinha = consultar(contaID);
 
         caixinha.sacar(valor);
-        conta.setSaldoInicial(conta.getSaldoInicial() + valor);
+        conta.setSaldoInicial(arredondar(conta.getSaldoInicial() + valor));
 
         return caixinha;
     }
 
     private Conta buscarConta(Long contaID) {
         Conta conta = contaController.buscarPorId(contaID);
-        if(conta == null) {
+        if (conta == null) {
             throw new IllegalArgumentException("Conta não encontrada!");
         }
         return conta;
     }
 
     private void validarValor(double valor) {
-        if(Double.isNaN(valor) || Double.isInfinite(valor) || valor <= 0) {
-            throw new IllegalArgumentException("O valor deve ser maior que 0.");
+        if (Double.isNaN(valor) || Double.isInfinite(valor)
+                || valor <= 0 || arredondar(valor) <= 0) {
+            throw new IllegalArgumentException("O valor deve ser de pelo menos R$ 0,01.");
         }
+    }
+
+    private double arredondar(double valor) {
+        return BigDecimal.valueOf(valor)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
     }
 }
