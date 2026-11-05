@@ -1,17 +1,17 @@
-
 package controller;
 
 import model.Conta;
 import model.Poupanca;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.Map;
 
 // guardar e resgatar dinheiro
 
 public class PoupancaController {
+
     private final ContaController contaController;
     private final Map<Long, Poupanca> caixinhas = new HashMap<>();
 
@@ -25,64 +25,97 @@ public class PoupancaController {
     }
 
     public Poupanca guardar(Long contaID, double valor) {
+
+        // valida o valor antes de alterar qualquer saldo
         validarValor(valor);
-        valor = arredondar(valor);
 
         Conta conta = buscarConta(contaID);
         Poupanca caixinha = consultar(contaID);
 
-        if (arredondar(conta.getSaldoInicial()) < valor) {
-            throw new IllegalArgumentException("Saldo insuficiente na conta!");
+        double saldoConta = arredondar(conta.getSaldoInicial());
+        double valorArredondado = arredondar(valor);
+
+        // verifica se a conta possui saldo suficiente
+        if (saldoConta < valorArredondado) {
+            throw new IllegalArgumentException(
+                    "Saldo insuficiente na conta!"
+            );
         }
 
-        conta.setSaldoInicial(arredondar(conta.getSaldoInicial() - valor));
-        caixinha.depositar(valor);
+        // tira o dinheiro da conta
+        conta.setSaldoInicial(
+                arredondar(saldoConta - valorArredondado)
+        );
+
+        // coloca o dinheiro na caixinha
+        caixinha.depositar(valorArredondado);
 
         return caixinha;
     }
 
     public Poupanca resgatar(Long contaID, double valor) {
+
+        // valida o valor antes de alterar qualquer saldo
         validarValor(valor);
-        valor = arredondar(valor);
 
         Conta conta = buscarConta(contaID);
         Poupanca caixinha = consultar(contaID);
 
-        caixinha.sacar(valor);
-        conta.setSaldoInicial(arredondar(conta.getSaldoInicial() + valor));
+        double valorArredondado = arredondar(valor);
+
+        // verifica se a caixinha possui saldo suficiente
+        if (caixinha.getSaldo() < valorArredondado) {
+            throw new IllegalArgumentException(
+                    "Saldo insuficiente na poupança!"
+            );
+        }
+
+        // tira o dinheiro da caixinha
+        caixinha.sacar(valorArredondado);
+
+        // devolve o dinheiro para a conta
+        conta.setSaldoInicial(
+                arredondar(conta.getSaldoInicial() + valorArredondado)
+        );
 
         return caixinha;
     }
 
     private Conta buscarConta(Long contaID) {
+
         Conta conta = contaController.buscarPorId(contaID);
+
         if (conta == null) {
-            throw new IllegalArgumentException("Conta não encontrada!");
+            throw new IllegalArgumentException(
+                    "Conta não encontrada!"
+            );
         }
+
         return conta;
     }
 
-    // CORREÇÃO: valida antes de arredondar
     private void validarValor(double valor) {
+
+        // rejeita valores negativos, zero, NaN e infinito
         if (!Double.isFinite(valor) || valor <= 0) {
             throw new IllegalArgumentException(
-                "O valor deve ser de pelo menos R$ 0,01."
+                    "O valor deve ser maior que zero."
             );
         }
 
         BigDecimal quantia = BigDecimal.valueOf(valor);
 
-        // Rejeita valores inferiores a um centavo
-        if (quantia.compareTo(new BigDecimal("0.01")) < 0) {
+        // rejeita valores menores que R$ 0,01
+        if (quantia.compareTo(BigDecimal.valueOf(0.01)) < 0) {
             throw new IllegalArgumentException(
-                "O valor deve ser de pelo menos R$ 0,01."
+                    "O valor mínimo é R$ 0,01."
             );
         }
 
-        // Rejeita valores com frações de centavo
-        if (quantia.stripTrailingZeros().scale() > 2) {
+        // rejeita valores com mais de duas casas decimais
+        if (quantia.scale() > 2) {
             throw new IllegalArgumentException(
-                "O valor deve ter no máximo duas casas decimais."
+                    "O valor deve possuir no máximo duas casas decimais."
             );
         }
     }
