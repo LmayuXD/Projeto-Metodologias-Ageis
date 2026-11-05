@@ -91,14 +91,14 @@ public class PoupancaController {
         // rejeita NaN e infinito
         if (!Double.isFinite(valor)) {
             throw new IllegalArgumentException(
-                    "Valor inválido."
+                    "O valor deve ser maior que 0."
             );
         }
 
         // rejeita zero e valores negativos
         if (valor <= 0) {
             throw new IllegalArgumentException(
-                    "O valor deve ser maior que zero."
+                    "O valor deve ser maior que 0."
             );
         }
 
@@ -109,15 +109,12 @@ public class PoupancaController {
                 BigDecimal.valueOf(0.01)
         ) < 0) {
             throw new IllegalArgumentException(
-                    "O valor mínimo é R$ 0,01."
+                    "O valor deve ser maior que 0."
             );
         }
 
-        // verifica se o valor possui mais de duas casas
-        BigDecimal valorComDuasCasas =
-                valorDecimal.setScale(2, RoundingMode.DOWN);
-
-        if (valorDecimal.compareTo(valorComDuasCasas) != 0) {
+        // rejeita valores com mais de duas casas decimais
+        if (valorDecimal.scale() > 2) {
             throw new IllegalArgumentException(
                     "O valor deve possuir no máximo duas casas decimais."
             );
