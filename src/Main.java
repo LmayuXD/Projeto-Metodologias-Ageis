@@ -10,6 +10,7 @@ public class Main {
             TesteServidor.testeCors();
             TesteServidor.testeContas();
             TesteServidor.testePoupanca();
+            TesteServidor.testePix();
         } catch (Exception e) {
             TesteServidor.falhas++;
             System.out.println("[ERRO]   o teste parou por uma exceção: " + e);

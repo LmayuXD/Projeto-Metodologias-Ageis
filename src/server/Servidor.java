@@ -1,5 +1,6 @@
 package server;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,24 +8,37 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import controller.ContaController;
 import controller.PoupancaController;
+import controller.TransferenciaController;
 import model.Conta;
+import model.Transferencia;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class Servidor {
 
     // Formato do JSON que o React envia
     private record CadastroRequest(String nomeTitular, String documento) {}
     private record ValorRequest(double valor) {}
+    private record PixRequest(Long contaOrigemId, String chaveDestino, double valor, String descricao) {}
+
+    // Esconde o extrato do JSON da conta: ele só sai pela rota /api/contas/{id}/extrato
+    private abstract static class ContaSemExtrato {
+        @JsonIgnore
+        abstract List<Transferencia> getExtrato();
+    }
 
     private static final ContaController contaController = new ContaController();
     private static final PoupancaController poupancaController = new PoupancaController(contaController);
+    private static final TransferenciaController transferenciaController = new TransferenciaController(contaController);
     private static final ObjectMapper json = new ObjectMapper()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .addMixIn(Conta.class, ContaSemExtrato.class);
 
     @FunctionalInterface
     private interface Rota {
@@ -36,6 +50,7 @@ public class Servidor {
 
         servidor.createContext("/api/contas", ex -> executar(ex, Servidor::rotaContas));
         servidor.createContext("/api/poupanca", ex -> executar(ex, Servidor::rotaPoupanca));
+        servidor.createContext("/api/pix", ex -> executar(ex, Servidor::rotaPix));
 
         servidor.start();
         System.out.println("Servidor rodando em http://localhost:8080");
@@ -61,6 +76,9 @@ public class Servidor {
         } catch (IllegalArgumentException e) {
             // validação das regras de negócio (e NumberFormatException) -> 400
             responder(ex, 400, erro(e.getMessage()));
+        } catch (NoSuchElementException e) {
+            // conta, chave Pix ou transação que não existe -> 404
+            responder(ex, 404, erro(e.getMessage()));
         } catch (JsonProcessingException e) {
             responder(ex, 400, erro("JSON inválido"));
         } catch (Exception e) {
@@ -73,6 +91,7 @@ public class Servidor {
     // POST /api/contas        -> cadastra
     // GET  /api/contas        -> lista todas
     // GET  /api/contas/{id}   -> busca uma
+    // GET  /api/contas/{id}/extrato[?tipo=PIX_ENVIADO|PIX_RECEBIDO] -> extrato, do mais recente ao mais antigo
     private static void rotaContas(HttpExchange ex, String metodo, String[] partes) throws Exception {
         boolean colecao = partes.length == 3;
         boolean item = partes.length == 4;
@@ -93,6 +112,24 @@ public class Servidor {
                 responder(ex, 200, json.writeValueAsString(conta));
             }
 
+        } else if (metodo.equals("GET") && partes.length == 5 && partes[4].equals("extrato")) {
+            Long contaId = Long.parseLong(partes[3]);
+            String tipo = parametro(ex, "tipo");
+            responder(ex, 200, json.writeValueAsString(transferenciaController.listarExtrato(contaId, tipo)));
+
+        } else {
+            responder(ex, 404, erro("Rota não encontrada"));
+        }
+    }
+
+    // -------------------------------------------------------------------- pix
+    // POST /api/pix -> {"contaOrigemId":1,"chaveDestino":"98765432100","valor":50,"descricao":"almoço"}
+    private static void rotaPix(HttpExchange ex, String metodo, String[] partes) throws Exception {
+        if (metodo.equals("POST") && partes.length == 3) {
+            PixRequest req = json.readValue(ex.getRequestBody(), PixRequest.class);
+            Transferencia comprovante = transferenciaController.realizarPix(
+                    req.contaOrigemId(), req.chaveDestino(), req.valor(), req.descricao());
+            responder(ex, 201, json.writeValueAsString(comprovante));
         } else {
             responder(ex, 404, erro("Rota não encontrada"));
         }
@@ -126,6 +163,21 @@ public class Servidor {
     }
 
     // ---------------------------------------------------------------- helpers
+    // lê um parâmetro da query string (?nome=valor); null se não existir
+    private static String parametro(HttpExchange ex, String nome) {
+        String query = ex.getRequestURI().getQuery();
+        if (query == null) {
+            return null;
+        }
+        for (String par : query.split("&")) {
+            String[] kv = par.split("=", 2);
+            if (kv[0].equals(nome) && kv.length == 2) {
+                return kv[1];
+            }
+        }
+        return null;
+    }
+
     private static String erro(String mensagem) throws IOException {
         return json.writeValueAsString(Map.of("erro", mensagem));
     }

@@ -26,6 +26,7 @@ public class TesteServidor {
         testeCors();
         testeContas();
         testePoupanca();
+        testePix();
 
         System.out.println("\n==== " + ok + " OK | " + falhas + " FALHAS ====");
         System.exit(falhas > 0 ? 1 : 0);   // encerra também o servidor
@@ -184,7 +185,114 @@ public class TesteServidor {
                 saldoConta(1) == 500.0 && saldoCaixinha(1) == 0.0);
     }
 
+    // ------------------------------------------------------- pix e extrato
+    // Roda depois de testeContas e testePoupanca: contas 1, 2 e 3 existem, todas com saldo 500.
+    //   1 = Maria Silva (12345678901) | 2 = João Pedro (98765432100) | 3 = Ana Clara (11122233344)
+    public static void testePix() throws Exception {
+        titulo("/api/pix e /api/contas/{id}/extrato (RF-02.3 e RF-02.4)");
+
+        Resp r = enviar("GET", "/api/contas/1", null);
+        check("JSON da conta não inclui o extrato", r.status() == 200 && !r.corpo().has("extrato"));
+
+        r = enviar("GET", "/api/contas/1/extrato", null);
+        check("extrato começa vazio", r.status() == 200 && r.corpo().isArray() && r.corpo().size() == 0);
+
+        // ---- Pix válido
+        r = enviar("POST", "/api/pix", corpoPix(1, "98765432100", "150", "almoço"));
+        check("Pix 1 -> 2 de 150 retorna 201", r.status() == 201);
+        check("comprovante é o registro de saída",
+                r.corpo().get("tipo").asText().equals("PIX_ENVIADO") && r.corpo().get("valor").asDouble() == 150.0);
+        check("comprovante tem id e data", r.corpo().get("id").asText().length() > 0 && r.corpo().get("data").asText().length() > 0);
+        check("descrição cita o destinatário e a mensagem",
+                r.corpo().get("descricao").asText().contains("João Pedro") && r.corpo().get("descricao").asText().contains("almoço"));
+        String idPix = r.corpo().get("id").asText();
+
+        check("origem foi debitada (350)", saldoConta(1) == 350.0);
+        check("destino foi creditado (650)", saldoConta(2) == 650.0);
+
+        r = enviar("GET", "/api/contas/1/extrato", null);
+        check("extrato da origem tem 1 saída",
+                r.status() == 200 && r.corpo().size() == 1 && r.corpo().get(0).get("tipo").asText().equals("PIX_ENVIADO"));
+        r = enviar("GET", "/api/contas/2/extrato", null);
+        check("extrato do destino tem 1 entrada com o mesmo id",
+                r.corpo().size() == 1 && r.corpo().get(0).get("tipo").asText().equals("PIX_RECEBIDO")
+                        && r.corpo().get(0).get("id").asText().equals(idPix));
+
+        // ---- chave formatada e sem descrição
+        r = enviar("POST", "/api/pix", corpoPix(3, "123.456.789-01", "10.5", null));
+        check("chave com pontos e traço é aceita, descrição é opcional", r.status() == 201);
+        check("saldos após o segundo Pix (3 = 489.5, 1 = 360.5)", saldoConta(3) == 489.5 && saldoConta(1) == 360.5);
+
+        // ---- extrato: ordem e filtro
+        r = enviar("GET", "/api/contas/1/extrato", null);
+        check("extrato da conta 1 tem 2 registros, o mais recente primeiro",
+                r.corpo().size() == 2 && r.corpo().get(0).get("valor").asDouble() == 10.5
+                        && r.corpo().get(1).get("valor").asDouble() == 150.0);
+
+        r = enviar("GET", "/api/contas/1/extrato?tipo=PIX_RECEBIDO", null);
+        check("filtro PIX_RECEBIDO traz só o recebido",
+                r.status() == 200 && r.corpo().size() == 1 && r.corpo().get(0).get("valor").asDouble() == 10.5);
+        r = enviar("GET", "/api/contas/1/extrato?tipo=pix_enviado", null);
+        check("filtro PIX_ENVIADO (minúsculo também) traz só o enviado",
+                r.status() == 200 && r.corpo().size() == 1 && r.corpo().get(0).get("valor").asDouble() == 150.0);
+        r = enviar("GET", "/api/contas/1/extrato?tipo=OUTRO", null);
+        check("filtro inválido -> 400", r.status() == 400 && r.corpo().has("erro"));
+
+        // ---- Pix recusado (nada deve mudar)
+        r = enviar("POST", "/api/pix", corpoPix(1, "98765432100", "1000", null));
+        check("saldo insuficiente -> 400",
+                r.status() == 400 && r.corpo().get("erro").asText().contains("Saldo insuficiente"));
+        r = enviar("POST", "/api/pix", corpoPix(1, "98765432100", "6000", null));
+        check("acima do limite por transferência -> 400", r.status() == 400 && r.corpo().has("erro"));
+        r = enviar("POST", "/api/pix", corpoPix(1, "98765432100", "0", null));
+        check("valor zero -> 400", r.status() == 400);
+        r = enviar("POST", "/api/pix", corpoPix(1, "98765432100", "-5", null));
+        check("valor negativo -> 400", r.status() == 400);
+        r = enviar("POST", "/api/pix", corpoPix(1, "98765432100", "10.005", null));
+        check("mais de 2 casas decimais -> 400", r.status() == 400);
+        r = enviar("POST", "/api/pix", "{\"contaOrigemId\":1,\"chaveDestino\":\"98765432100\"}");
+        check("valor ausente -> 400", r.status() == 400);
+        r = enviar("POST", "/api/pix", corpoPix(1, "", "10", null));
+        check("chave vazia -> 400", r.status() == 400);
+        r = enviar("POST", "/api/pix", corpoPix(1, "12345678901", "10", null));
+        check("Pix para a própria conta -> 400",
+                r.status() == 400 && r.corpo().get("erro").asText().contains("própria conta"));
+        r = enviar("POST", "/api/pix", corpoPix(1, "98765432100", "10", "x".repeat(141)));
+        check("descrição com mais de 140 caracteres -> 400", r.status() == 400);
+        r = enviar("POST", "/api/pix", "{isso não é json");
+        check("JSON malformado -> 400", r.status() == 400 && r.corpo().get("erro").asText().equals("JSON inválido"));
+        r = enviar("POST", "/api/pix", corpoPix(1, "00000000000", "10", null));
+        check("chave inexistente -> 404", r.status() == 404 && r.corpo().get("erro").asText().contains("Chave Pix"));
+        r = enviar("POST", "/api/pix", corpoPix(99, "98765432100", "10", null));
+        check("conta de origem inexistente -> 404", r.status() == 404);
+
+        check("Pix recusados não mexeram nos saldos",
+                saldoConta(1) == 360.5 && saldoConta(2) == 650.0 && saldoConta(3) == 489.5);
+        check("dinheiro total do banco é conservado (1500)",
+                saldoConta(1) + saldoConta(2) + saldoConta(3) == 1500.0);
+        r = enviar("GET", "/api/contas/1/extrato", null);
+        check("Pix recusados não entraram no extrato", r.corpo().size() == 2);
+
+        // ---- rotas e métodos
+        r = enviar("GET", "/api/contas/99/extrato", null);
+        check("extrato de conta inexistente -> 404", r.status() == 404 && r.corpo().has("erro"));
+        r = enviar("GET", "/api/contas/abc/extrato", null);
+        check("extrato com id não numérico -> 400", r.status() == 400);
+        r = enviar("POST", "/api/contas/1/extrato", "{}");
+        check("POST no extrato (só aceita GET) -> 404", r.status() == 404);
+        r = enviar("GET", "/api/pix", null);
+        check("GET em /api/pix (só aceita POST) -> 404", r.status() == 404);
+        r = enviar("POST", "/api/pix/1", "{}");
+        check("/api/pix/1 -> 404", r.status() == 404);
+    }
+
     // --------------------------------------------------------------- helpers
+    // monta o JSON do Pix; valor entra como texto para testar casas decimais; descricao null = omitida
+    static String corpoPix(long origem, String chave, String valor, String descricao) {
+        String d = descricao == null ? "" : ",\"descricao\":\"" + descricao + "\"";
+        return "{\"contaOrigemId\":" + origem + ",\"chaveDestino\":\"" + chave + "\",\"valor\":" + valor + d + "}";
+    }
+
     static double saldoConta(long id) throws Exception {
         return enviar("GET", "/api/contas/" + id, null).corpo().get("saldoInicial").asDouble();
     }
