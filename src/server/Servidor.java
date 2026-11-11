@@ -60,7 +60,7 @@ public class Servidor {
     // CORS + preflight + tratamento de erros, comum a todas as rotas
     private static void executar(HttpExchange ex, Rota rota) throws IOException {
         // CORS (o React roda em outra porta)
-        ex.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+        ex.getResponseHeaders().set("Access-Control-Allow-Origin", "http://localhost:5173");
         ex.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         ex.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type");
 

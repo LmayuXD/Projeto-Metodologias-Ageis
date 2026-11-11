@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../App.css";
 
-function Poupanca({ contaId, onVoltar }) {
+export default function Poupanca({ contaId, onVoltar }) {
 
     const [saldoPoupanca, setSaldoPoupanca] = useState(0);
     const [valor, setValor] = useState("");

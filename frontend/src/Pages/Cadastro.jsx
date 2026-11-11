@@ -1,49 +1,39 @@
-import "../App.jsx";
 import { useState } from "react";
-import {Link} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { contasService, entrarNaConta } from "../Services/api.js";
 
 export default function Cadastro() {
+    const navigate = useNavigate();
     const [form, setForm] = useState({ nomeTitular: "", documento: "" });
-    const [msg, setMsg] = useState("");
-    const [erro, setErro] = useState(false);
+    const [erro, setErro] = useState("");
+    const [enviando, setEnviando] = useState(false);
 
     const handleChange = (e) =>
         setForm({ ...form, [e.target.name]: e.target.value });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMsg("");
+        if (enviando) return; // evita clique duplo
+        setErro("");
+        setEnviando(true);
 
         try {
-            const resp = await fetch("http://localhost:8080/api/contas", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form),
-            });
-
-            const data = await resp.json();
-
-            if (!resp.ok) {
-                setErro(true);
-                setMsg(data.erro);          // mensagem de validação vinda do Java
-                return;
-            }
-
-            setErro(false);
-            setMsg(`Conta nº ${data.id} criada! Saldo: R$ ${data.saldoInicial.toFixed(2)}`);
-            setForm({ nomeTitular: "", documento: "" });
-        } catch {
-            setErro(true);
-            setMsg("Não foi possível conectar ao servidor.");
+            const conta = await contasService.cadastrar(form.nomeTitular, form.documento);
+            entrarNaConta(conta.id);   // a conta recém-criada vira a conta ativa
+            navigate("/");             // a tela inicial já mostra o saldo
+        } catch (err) {
+            setErro(err.message);      // mensagem de validação vinda do Java
+        } finally {
+            setEnviando(false);
         }
     };
 
     return (
 
-        <div class="cadastro-page">
+        <div className="cadastro-page">
 
-            <header class=" cabecalho-cadastro ">
-                <a id="seta-voltar" href={"/"}> &lt; </a>
+            <header className=" cabecalho-cadastro ">
+                <Link id="seta-voltar" to="/"> &lt; </Link>
                 {/* imagem do nekopay*/}
 
             </header>
@@ -53,30 +43,37 @@ export default function Cadastro() {
 
             <form onSubmit={handleSubmit}>
 
+                {erro && (
+                    <div id="cadastro-erro" className="comp-alerta comp-alerta-erro" role="alert">
+                        <span className="comp-alerta-icone" aria-hidden="true">!</span>
+                        <div>{erro}</div>
+                    </div>
+                )}
 
-             <label> Nome </label>
-                <input class="form-input"
-
-                    name="nomeTitular"
-                    placeholder="Nome completo"
-                    value={form.nomeTitular}
-                    onChange={handleChange}
-                    />
+                <label> Nome </label>
+                <input className="form-input"
+                       name="nomeTitular"
+                       placeholder="Nome completo"
+                       value={form.nomeTitular}
+                       onChange={handleChange}
+                />
                 <label> nº Documento </label>
-                <input class="form-input"
+                <input className="form-input"
                        name="documento"
                        placeholder="CPF ou CNPJ"
                        value={form.documento}
                        onChange={handleChange}
                 />
 
-                <button class="btn-cadastrar" type="submit">Cadastrar</button>
+                <button className="btn-cadastrar" type="submit" disabled={enviando}>
+                    {enviando ? "Cadastrando…" : "Cadastrar"}
+                </button>
 
             </form>
 
-                <footer class="cadastro-footer">
-                    &copy; Todos os direitos reservados por Tech Girls.
-                </footer>
+            <footer className="cadastro-footer">
+                &copy; Todos os direitos reservados por Tech Girls.
+            </footer>
         </div>
 
     );
