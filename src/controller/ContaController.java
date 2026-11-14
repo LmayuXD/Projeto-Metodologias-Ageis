@@ -60,6 +60,23 @@ public class ContaController {
         return null; // Caso não tenha encontrado.
     }
 
+    // 3.1. READ ONE BY DOCUMENT - Buscar conta por documento para o Login
+    public Conta buscarPorDocumento(String documento) {
+        if (documento == null) {
+            return null;
+        }
+        String docLimpo = documento.replaceAll("[.\\-/\\s]", "").trim();
+        for (Conta conta : contas) {
+            if (conta.getDocumento() != null) {
+                String contaDocLimpo = conta.getDocumento().replaceAll("[.\\-/\\s]", "").trim();
+                if (contaDocLimpo.equals(docLimpo)) {
+                    return conta;
+                }
+            }
+        }
+        return null;
+    }
+
     // 4. UPDATE - Atualizar dados da conta
     public Conta atualizarConta(Long id, Conta contaAtualizada) {
         for (int i = 0; i < contas.size(); i++) {
@@ -96,4 +113,5 @@ public class ContaController {
 
         return false; // Retorna falso se não encontrou a conta para deletar
     }
+
 }

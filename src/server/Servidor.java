@@ -24,6 +24,7 @@ public class Servidor {
 
     // Formato do JSON que o React envia
     private record CadastroRequest(String nomeTitular, String documento) {}
+    private record LoginRequest(String documento) {}
     private record ValorRequest(double valor) {}
     private record PixRequest(Long contaOrigemId, String chaveDestino, double valor, String descricao) {}
 
@@ -49,6 +50,7 @@ public class Servidor {
         HttpServer servidor = HttpServer.create(new InetSocketAddress(8080), 0);
 
         servidor.createContext("/api/contas", ex -> executar(ex, Servidor::rotaContas));
+        servidor.createContext("/api/login", ex -> executar(ex, Servidor::rotaLogin));
         servidor.createContext("/api/poupanca", ex -> executar(ex, Servidor::rotaPoupanca));
         servidor.createContext("/api/pix", ex -> executar(ex, Servidor::rotaPix));
 
@@ -188,6 +190,28 @@ public class Servidor {
         ex.sendResponseHeaders(status, bytes.length);
         try (OutputStream os = ex.getResponseBody()) {
             os.write(bytes);
+        }
+    }
+
+    // ----------------------------------------------------------------- login
+    // POST /api/login -> {"documento": "12345678901"}
+    private static void rotaLogin(HttpExchange ex, String metodo, String[] partes) throws Exception {
+        if (metodo.equals("POST") && partes.length == 3) {
+            LoginRequest req = json.readValue(ex.getRequestBody(), LoginRequest.class);
+
+            if (req.documento() == null || req.documento().trim().isEmpty()) {
+                throw new IllegalArgumentException("O documento é obrigatório para o login!");
+            }
+
+            Conta conta = contaController.buscarPorDocumento(req.documento());
+
+            if (conta == null) {
+                responder(ex, 404, erro("Conta não encontrada para o documento informado."));
+            } else {
+                responder(ex, 200, json.writeValueAsString(conta));
+            }
+        } else {
+            responder(ex, 404, erro("Rota não encontrada"));
         }
     }
 }
