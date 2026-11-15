@@ -1154,3 +1154,406 @@ button{
   outline: 3px solid var(--dourado);
   outline-offset: 3px;
 }
+
+
+/* =========================================
+   NEKOPAY - PÁGINA DE POUPANÇA
+   ========================================= */
+
+/* CONTAINER PRINCIPAL */
+
+.pagina-poupanca {
+  width: 100%;
+  min-height: 100vh;
+  padding: 25px;
+  background: #fcf7e7;
+  color: #403b2d;
+  font-family: inherit;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* CABEÇALHO */
+
+.cabecalho-poupanca {
+  width: 100%;
+  max-width: 650px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 35px;
+}
+
+.logo-nekopay {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #7b2925;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.botao-voltar {
+  border: none;
+  background: transparent;
+  color: #655f4d;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 8px;
+  transition: 0.2s;
+}
+
+.botao-voltar:hover {
+  color: #97271b;
+  transform: scale(1.1);
+}
+
+/* TÍTULO DA PÁGINA */
+
+.titulo-poupanca {
+  width: 100%;
+  max-width: 650px;
+  margin-bottom: 25px;
+}
+
+.titulo-poupanca h2 {
+  color: #403b2d;
+  font-size: 25px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.titulo-poupanca p {
+  color: #746e60;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* =========================================
+   CARTÕES DE SALDO
+   ========================================= */
+
+.resumo-poupanca {
+  width: 100%;
+  max-width: 650px;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+
+  margin-bottom: 30px;
+}
+
+.cartao-saldo {
+  background: #f4f0e8;
+  border: 1px solid #e3ddd0;
+  border-radius: 13px;
+
+  min-height: 125px;
+  padding: 18px 15px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  transition: 0.2s;
+}
+
+.cartao-saldo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(80, 65, 40, 0.08);
+}
+
+.cartao-saldo > span {
+  font-size: 25px;
+  margin-bottom: 8px;
+  color: #66704b;
+}
+
+.cartao-saldo p {
+  font-size: 12px;
+  color: #716b5c;
+  margin: 0 0 6px;
+}
+
+.cartao-saldo h3 {
+  font-size: 19px;
+  font-weight: 600;
+  color: #46583b;
+  margin: 0;
+}
+
+/* Cartão de dinheiro guardado */
+
+.cartao-saldo.dinheiro-guardado {
+  background: #f5eee6;
+}
+
+.cartao-saldo.dinheiro-guardado > span {
+  color: #8d4938;
+}
+
+.cartao-saldo.dinheiro-guardado h3 {
+  color: #8d4938;
+}
+
+/* =========================================
+   ÁREA DE MOVIMENTAÇÃO
+   ========================================= */
+
+.movimentacao-poupanca {
+  width: 100%;
+  max-width: 650px;
+}
+
+.movimentacao-poupanca h3 {
+  color: #403b2d;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* BOTÕES GUARDAR E RETIRAR */
+
+.botoes-operacao {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.botao-operacao {
+  border: none;
+  border-radius: 9px;
+  padding: 12px 10px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* Botão guardar */
+
+.botao-operacao.guardar {
+  background: #e5e2d5;
+  color: #536044;
+}
+
+.botao-operacao.guardar:hover,
+.botao-operacao.guardar.selecionado {
+  background: #747a51;
+  color: #fff;
+}
+
+/* Botão retirar */
+
+.botao-operacao.resgatar {
+  background: #f3e1dc;
+  color: #8e3931;
+}
+
+.botao-operacao.resgatar:hover,
+.botao-operacao.resgatar.selecionado {
+  background: #a94d43;
+  color: #fff;
+}
+
+/* =========================================
+   FORMULÁRIO
+   ========================================= */
+
+.movimentacao-poupanca form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.movimentacao-poupanca label {
+  color: #494438;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+#valor-poupanca {
+  width: 100%;
+  padding: 13px 14px;
+
+  background: #f7f4ed;
+  border: 1px solid #ded8cc;
+  border-radius: 9px;
+
+  outline: none;
+  font-size: 13px;
+  color: #403b2d;
+
+  transition: 0.2s;
+}
+
+#valor-poupanca::placeholder {
+  color: #aaa395;
+}
+
+#valor-poupanca:focus {
+  border-color: #747a51;
+  box-shadow: 0 0 0 3px rgba(116, 122, 81, 0.12);
+}
+
+/* =========================================
+   BOTÃO PRINCIPAL
+   ========================================= */
+
+.botao-movimentar {
+  width: 100%;
+  min-height: 43px;
+
+  border: none;
+  border-radius: 9px;
+
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* Guardar */
+
+.botao-movimentar.guardar {
+  background: #747a51;
+}
+
+.botao-movimentar.guardar:hover {
+  background: #5e6540;
+  transform: translateY(-1px);
+}
+
+/* Resgatar */
+
+.botao-movimentar.resgatar {
+  background: #982e2b;
+}
+
+.botao-movimentar.resgatar:hover {
+  background: #7d2422;
+  transform: translateY(-1px);
+}
+
+/* Botão desabilitado */
+
+.botao-movimentar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =========================================
+   MENSAGENS DE ERRO E SUCESSO
+   ========================================= */
+
+.mensagem-poupanca {
+  width: 100%;
+  padding: 13px 15px;
+  margin-top: 12px;
+
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.mensagem-poupanca.erro {
+  background: #f5dfdc;
+  border: 1px solid #e8c3bd;
+  color: #922e2b;
+}
+
+.mensagem-poupanca.sucesso {
+  background: #e5eadc;
+  border: 1px solid #cbd6bc;
+  color: #526642;
+}
+
+/* =========================================
+   RODAPÉ
+   ========================================= */
+
+.rodape-poupanca {
+  width: 100%;
+  max-width: 650px;
+
+  margin-top: auto;
+  padding-top: 35px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: #8c8270;
+  font-size: 11px;
+  text-align: center;
+}
+
+.rodape-poupanca p {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.rodape-poupanca::before {
+  content: "";
+  width: 80%;
+  height: 1px;
+  background: #e6dfd0;
+  margin-bottom: 15px;
+}
+
+/* =========================================
+   RESPONSIVIDADE
+   ========================================= */
+
+@media (max-width: 480px) {
+
+  .pagina-poupanca {
+    padding: 20px 16px;
+  }
+
+  .cabecalho-poupanca {
+    margin-bottom: 28px;
+  }
+
+  .titulo-poupanca h2 {
+    font-size: 22px;
+  }
+
+  .resumo-poupanca {
+    gap: 8px;
+  }
+
+  .cartao-saldo {
+    min-height: 115px;
+    padding: 12px 8px;
+  }
+
+  .cartao-saldo h3 {
+    font-size: 16px;
+  }
+
+  .cartao-saldo p {
+    font-size: 11px;
+  }
+
+  .botao-operacao {
+    font-size: 11px;
+    padding: 12px 5px;
+  }
+
+  .movimentacao-poupanca h3 {
+    font-size: 17px;
+  }
+}
