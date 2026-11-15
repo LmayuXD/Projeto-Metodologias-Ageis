@@ -7,7 +7,8 @@ import Transferencia from "./Pages/Transferencia.jsx";
 import Poupanca from "./Pages/Poupanca.jsx";
 import Extrato from "./Pages/Extrato.jsx";
 import Perfil from "./Pages/Perfil.jsx";
-
+import EditarPerfil from "./Pages/EditarPerfil.jsx";
+import Login from "./Pages/Login.jsx";
 
 function App() {
 
@@ -21,12 +22,15 @@ function App() {
 
             <Route path="/perfil" element={<Perfil />} />
 
+           <Route path="/login" element={< Login />} />
+
+             <Route path="/editar-perfil" element={<EditarPerfil />} />
+
             <Route path="/transferencia" element={<Transferencia />} />
 
             <Route path="/poupanca" element={<Poupanca />} />
 
             <Route path="/extrato" element={<Extrato />} />
-
 
        </Routes>
      </BrowserRouter>
