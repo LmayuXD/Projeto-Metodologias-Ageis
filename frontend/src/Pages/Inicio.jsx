@@ -4,6 +4,8 @@ import { useConta, formatarMoeda } from "../Services/api.js";
 import { LayoutPagina, Carregando, ErroCarregar } from "../Components/Layout.jsx";
 // Estilos: App.css, blocos "comp-*" (compartilhados) e "inicio-*" (desta página).
 
+import "./Inicio.css"
+
 // ----- INICIO == PERGUNTA SE O USUARIO DESEJA CRIAR OU ENTRAR EM UMA CONTA EXISTENTE  -----
 
 export default function Inicio() {
@@ -18,6 +20,7 @@ export default function Inicio() {
     const {contaId, conta, carregando, erro, recarregar} = useConta();
     const primeiroNome = conta?.nomeTitular?.split(" ")[0];
     const [saldoVisivel, setSaldoVisivel] = useState(true);
+
     // Sem conta ativa neste navegador: tela de boas-vindas
     if (!contaId) {
         return (
@@ -25,10 +28,10 @@ export default function Inicio() {
                 <h2> SEJA BEM-VINDO(A) </h2>
 
                 <Link className="botao-inicio" to={"/cadastro"}>
-                    <button>Iniciar em NekoPay</button>
+                    <button>Cadastre-se </button>
                 </Link>
                 <Link className="botao-inicio" to={"/login"}>
-                    <button>Já tenho conta</button>
+                    <button>Já tenho uma conta</button>
                 </Link>
 
                 <footer className="cadastro-footer">

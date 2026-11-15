@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import {useConta} from "../Services/api.js";
-
+import "./Login.css"
+import "./Cadastro.css"
 export default function login() {
 
 // ----- LOGIN  == CADASTRO DE >>NOVOS<<  USUARIOS!  -----

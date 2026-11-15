@@ -1,0 +1,219 @@
+
+/* ---------------------------------------------------------------------
+   LAYOUT — moldura das páginas
+   Os resets abaixo existem porque o App.css global define estilos para
+   p, h2, form e button que atrapalhariam estas páginas.
+   --------------------------------------------------------------------- */
+.layout-pagina {
+    --texto-principal: #3d3a33;
+    --oliva-escuro: #4f6137;
+    --borda-cartao: #e8dfc9;
+    --fundo-cartao: #fffdf8;
+    --sucesso: #4f6137;
+    --sucesso-fundo: #eef0df;
+
+    width: 100%;
+    max-width: 440px;
+    min-height: 100vh;
+    margin: 0 auto;
+    align-self: stretch;
+    padding: 0 18px 24px;
+
+    display: flex;
+    flex-direction: column;
+
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: var(--texto-principal);
+    background-color: var(--creme);
+    text-align: left;
+}
+
+.layout-pagina p,
+.layout-pagina h1,
+.layout-pagina h2,
+.layout-pagina h3 {
+    margin: 0;
+    font-family: inherit;
+}
+
+.layout-pagina a { color: inherit; text-decoration: none; }
+.layout-pagina ul { list-style: none; margin: 0; padding: 0; }
+.layout-pagina dl,
+.layout-pagina dd { margin: 0; }
+
+.layout-pagina form {
+    display: block;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    padding: 0;
+}
+
+/* Cabeçalho: seta de voltar + logo à esquerda, hambúrguer à direita */
+.layout-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0 8px;
+}
+
+.layout-cabecalho-esquerda {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.layout-marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.layout-marca-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--vermelho);
+    border-radius: 12px;
+    background: var(--branco);
+    font-size: 20px;
+}
+
+.layout-marca-nome {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--oliva-escuro);
+}
+
+/* Botões redondos só com ícone (voltar, menu, fechar menu) */
+.layout-botao-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--terracota);
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.layout-botao-icone:hover { background-color: rgba(168, 116, 43, 0.12); }
+.layout-botao-icone:focus-visible { outline: 3px solid var(--dourado); outline-offset: 2px; }
+
+.layout-botao-icone-claro { color: var(--creme); }
+.layout-botao-icone-claro:hover { background-color: rgba(255, 255, 255, 0.12); }
+
+/* Menu lateral (gaveta) com fundo escurecido */
+.layout-menu-fundo {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(40, 38, 25, 0.5);
+}
+
+.layout-menu-lateral {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: min(82vw, 320px);
+    padding: 18px 16px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+
+    background: #4b4a30;
+    color: var(--creme);
+    animation: layout-menu-entrada 0.2s ease;
+}
+
+.layout-menu-lateral .layout-marca-nome { color: var(--creme); }
+
+.layout-menu-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.layout-menu-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.layout-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 50px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--creme);
+    font: inherit;
+    font-size: 16px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.layout-menu-item:hover { background: rgba(255, 255, 255, 0.08); }
+.layout-menu-item:focus-visible { outline: 3px solid var(--dourado); outline-offset: 2px; }
+.layout-menu-item-ativo { background: rgba(255, 255, 255, 0.16); font-weight: 600; }
+
+@keyframes layout-menu-entrada {
+    from { transform: translateX(-24px); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+}
+
+/* Área central: título da página + conteúdo */
+.layout-conteudo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding-top: 8px;
+}
+
+.layout-titulo-pagina {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.layout-titulo {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--oliva-escuro);
+}
+
+.layout-subtitulo {
+    font-size: 14px;
+    color: #82796d;
+}
+
+.layout-rodape {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--vermelho);
+    font-size: 14px;
+}
+
+.layout-rodape-texto {
+    font-size: 11.5px;
+    color: #82796d;
+}
+
+

@@ -8,6 +8,9 @@ import {
   extrairContraparte,
   sairDaConta,
 } from "../Services/api.js";
+
+import "./Extrato.css"
+
 import {LayoutPagina, Carregando, EstadoSemConta, ErroCarregar} from "../Components/Layout.jsx";
 // Estilos: App.css, blocos "comp-*" (compartilhados) e "extrato-*" (desta página).
 

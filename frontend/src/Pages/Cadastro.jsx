@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { contasService, entrarNaConta } from "../Services/api.js";
-
+import "./Cadastro.css"
 //----- CADASTRO = FORMULARIO QUE PEDE NOME E DOCUMENTO DO NOVO USUARIO -----
 
 
@@ -44,14 +44,17 @@ export default function Cadastro() {
             <h2>Abrir conta </h2>
             <p> Preencha os dados abaixo para abrir a sua conta NekoPay. </p>
 
+
+            {erro && (
+                <div id="cadastro-erro" className="comp-alerta comp-alerta-erro" role="alert">
+                    <span className="comp-alerta-icone" aria-hidden="true">!</span>
+                    <div>{erro}</div>
+                </div>
+            )}
+
             <form onSubmit={handleSubmit}>
 
-                {erro && (
-                    <div id="cadastro-erro" className="comp-alerta comp-alerta-erro" role="alert">
-                        <span className="comp-alerta-icone" aria-hidden="true">!</span>
-                        <div>{erro}</div>
-                    </div>
-                )}
+
 
                 <label> Nome </label>
                 <input className="form-input"
@@ -70,11 +73,11 @@ export default function Cadastro() {
 
                 <label> Senha </label>
                 <input className="form-input"
-                                       name="documento"
-                                       placeholder="CPF ou CNPJ"
-                                       value={form.documento}
-                                       onChange={handleChange}
-                                />
+                       name="senha"
+                       placeholder="Digite uma senha"
+                       value={form.documento}
+                       onChange={handleChange}
+                />
 
                 <button className="btn-cadastrar" type="submit" disabled={enviando}>
                     {enviando ? "Cadastrando…" : "Cadastrar"}

@@ -10,6 +10,8 @@ import {
   lerValor,
   extrairContraparte,
 } from "../Services/api.js";
+
+import "./Transferencia.css"
 import { LayoutPagina, Carregando, EstadoSemConta, ErroCarregar } from "../Components/Layout.jsx";
 // Estilos: App.css, blocos "comp-*" (compartilhados) e "transferencia-*" (desta página).
 

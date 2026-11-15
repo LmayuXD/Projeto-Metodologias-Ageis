@@ -1,0 +1,36 @@
+/*   LOGIN (Pages/Login.jsx)
+   Reaproveita .cadastro-page, .form-input e .btn-cadastrar da tela de Cadastro.
+   --------------------------------------------------------------------- */
+
+/* Dica abaixo do campo de documento */
+.login-dica {
+    align-self: flex-start;
+    margin-top: -14px;
+    color: #82796d;
+    font-size: 12.5px;
+    text-align: left;
+}
+
+/* "Ainda não tem conta? Abrir conta" / "Já tem conta? Entrar" */
+.login-alternativa {
+    margin-top: 18px;
+    color: #82796d;
+    font-size: 14px;
+    text-align: center;
+}
+
+.login-alternativa a {
+    color: var(--vermelho);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-alternativa a:hover { text-decoration: underline; }
+
+.login-alternativa a:focus-visible {
+    border-radius: 4px;
+    outline: 3px solid var(--dourado);
+    outline-offset: 3px;
+}
+
+

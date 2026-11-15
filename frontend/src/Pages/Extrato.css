@@ -1,0 +1,130 @@
+/* ---------------------------------------------------------------------
+   EXTRATO (Pages/Extrato.jsx)
+   --------------------------------------------------------------------- */
+.extrato-filtros {
+    display: flex;
+    gap: 8px;
+    padding-bottom: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.extrato-filtros::-webkit-scrollbar { display: none; }
+.extrato-filtros .comp-chip { flex: none; }
+
+.extrato-resumo-grade {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.extrato-resumo-item { padding: 14px; }
+.extrato-resumo-rotulo { display: block; font-size: 12.5px; color: #82796d; }
+.extrato-resumo-valor { display: block; margin-top: 2px; font-size: 18px; }
+.extrato-resumo-valor-entrada { color: var(--sucesso); }
+.extrato-resumo-valor-saida { color: var(--vermelho); }
+
+.extrato-dia-titulo {
+    margin: 4px 0 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #82796d;
+    text-transform: capitalize;
+}
+
+.extrato-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.extrato-item {
+    background: var(--fundo-cartao);
+    border: 1px solid var(--borda-cartao);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.extrato-item-botao {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 64px;
+    padding: 12px 14px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.extrato-item-botao:hover { background: rgba(243, 226, 201, 0.35); }
+.extrato-item-botao:focus-visible { outline: 3px solid var(--dourado); outline-offset: -3px; }
+
+.extrato-item-icone {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.extrato-icone-pix-enviado { background: #fbe5e3; color: var(--vermelho); }
+.extrato-icone-pix-recebido { background: var(--sucesso-fundo); color: var(--sucesso); }
+.extrato-icone-poupanca { background: #f7ead0; color: var(--terracota); }
+
+.extrato-item-texto { flex: 1; min-width: 0; }
+.extrato-item-titulo { font-size: 14.5px; font-weight: 600; }
+
+.extrato-item-subtitulo {
+    display: block;
+    margin-top: 2px;
+    font-size: 12.5px;
+    color: #82796d;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.extrato-item-direita { flex: none; text-align: right; }
+.extrato-item-valor { display: block; font-size: 15px; font-weight: 700; }
+.extrato-valor-saida { color: var(--vermelho); }
+.extrato-valor-entrada { color: var(--sucesso); }
+.extrato-valor-poupanca { color: var(--terracota); }
+.extrato-item-hora { display: block; margin-top: 2px; font-size: 11.5px; color: #a0968a; }
+
+/* Selo que diferencia Pix de Poupança (além da cor, tem texto) */
+.extrato-selo {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    vertical-align: middle;
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+.extrato-selo-pix { background: #fbe5e3; color: var(--vermelho); }
+.extrato-selo-poupanca { background: #f7ead0; color: var(--terracota); }
+
+.extrato-item-detalhes {
+    padding: 4px 14px 12px;
+    border-top: 1px dashed #eadfc7;
+}
+
+
+/* Respeita quem prefere menos animações (só nas páginas deste bloco) */
+@media (prefers-reduced-motion: reduce) {
+    .layout-pagina *,
+    .layout-pagina *::before,
+    .layout-pagina *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

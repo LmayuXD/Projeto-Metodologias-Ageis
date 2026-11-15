@@ -10,6 +10,10 @@ import {
 import { LayoutPagina, Carregando, EstadoSemConta, ErroCarregar } from "../Components/Layout.jsx";
 // Estilos: App.css, blocos "comp-*" (compartilhados) e "perfil-*" (desta página).
 
+
+import "./Cadastro.css"
+import "./Editarperfil.css"
+
 // -----  PERFIL  == EXITE SALDO, NOME E FOTO DO USUARIO, CRUD DO PERFIL E BOTOES PARA DEPOSITAR OU GUARDAR O DINHEIRO
 // OU SAIR DA CONTA !! -----
 

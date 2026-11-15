@@ -1,0 +1,97 @@
+/* ---------------------------------------------------------------------
+   TRANSFERÊNCIA (Pages/Transferencia.jsx)
+   --------------------------------------------------------------------- */
+.transferencia-abas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.transferencia-aba {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 46px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 12px;
+    background: #f9dcdc;
+    color: var(--vermelho);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.transferencia-aba[aria-selected="true"] { background: var(--vermelho); color: var(--creme); }
+.transferencia-aba:disabled { background: #efe8d8; color: #a79d89; cursor: not-allowed; }
+
+.transferencia-aba-selo {
+    padding: 2px 6px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.08);
+    font-size: 10px;
+}
+
+.transferencia-valor-envoltorio { position: relative; }
+
+.transferencia-valor-prefixo {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    color: var(--terracota);
+    font-weight: 600;
+}
+
+.transferencia-valor-envoltorio .comp-campo-input {
+    padding-left: 46px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.transferencia-valores-rapidos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Valor em destaque (tela de revisão) */
+.transferencia-destaque-valor {
+    padding: 6px 0 12px;
+    text-align: center;
+}
+
+.transferencia-destaque-valor-rotulo { display: block; font-size: 13px; color: #82796d; }
+.transferencia-destaque-valor-numero { font-size: 32px; font-weight: 700; color: var(--vermelho); }
+
+/* Comprovante (tela de sucesso) */
+.transferencia-comprovante-topo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    text-align: center;
+}
+
+.transferencia-comprovante-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--sucesso);
+    color: var(--branco);
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.transferencia-saldo-atual {
+    font-size: 12px;
+    color: #82796d;
+    text-align: center;
+}
+
+

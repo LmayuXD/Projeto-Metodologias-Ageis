@@ -1,0 +1,49 @@
+/* ---------------------------------------------------------------------
+   PERFIL (Pages/Perfil.jsx)
+   --------------------------------------------------------------------- */
+.perfil-cabecalho-usuario {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.perfil-avatar {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--vermelho);
+    color: var(--creme);
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.perfil-nome-exibido {
+    font-size: 20px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.perfil-documento-mascarado {
+    margin-top: 2px;
+    font-size: 13px;
+    color: #82796d;
+}
+
+.perfil-botao-saldo-visibilidade {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+}
+
+.perfil-secao-encerrar-conta {
+    border-color: var(--rosa);
+    background: #fff8f7;
+}
+
+.perfil-encerrar-titulo { color: var(--vermelho); }
+.perfil-encerrar-explicacao { font-size: 12px; color: #82796d; }
+

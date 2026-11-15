@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "../App.css";
+import"./Poupanca.css"
 
 export default function Poupanca({ contaId, onVoltar }) {
 
