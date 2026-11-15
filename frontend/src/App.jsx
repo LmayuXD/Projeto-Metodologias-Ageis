@@ -1,12 +1,12 @@
 
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Cadastro from "./Pages/Cadastro.jsx";
 import Inicio from "./Pages/Inicio.jsx";
-import EditarPerfil from "./Pages/EditarPerfil.jsx";
 import Transferencia from "./Pages/Transferencia.jsx";
 import Poupanca from "./Pages/Poupanca.jsx";
 import Extrato from "./Pages/Extrato.jsx";
+import Perfil from "./Pages/Perfil.jsx";
 
 
 function App() {
