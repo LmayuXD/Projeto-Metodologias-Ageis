@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useConta, formatarMoeda } from "../Services/api.js";
 import { LayoutPagina, Carregando, ErroCarregar } from "../Components/Layout.jsx";
-import { App } from "../Services/App.css";
+import "../App.css";
 // Estilos: App.css, blocos "comp-*" (compartilhados) e "inicio-*" (desta página).
 export default function Perfil() {
     const ATALHOS = [
