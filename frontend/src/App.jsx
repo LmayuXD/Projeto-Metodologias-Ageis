@@ -22,9 +22,9 @@ function App() {
 
             <Route path="/perfil" element={<Perfil />} />
 
-           <Route path="/login" element={< Login />} />
+            <Route path="/login" element={< Login />} />
 
-             <Route path="/editar-perfil" element={<EditarPerfil />} />
+            <Route path="/editar-perfil" element={<EditarPerfil />} />
 
             <Route path="/transferencia" element={<Transferencia />} />
 
