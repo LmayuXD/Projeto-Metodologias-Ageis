@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { contasService, entrarNaConta } from "../Services/api.js";
 
+//----- CADASTRO = FORMULARIO QUE PEDE NOME E DOCUMENTO DO NOVO USUARIO -----
+
+
 export default function Cadastro() {
     const navigate = useNavigate();
     const [form, setForm] = useState({ nomeTitular: "", documento: "" });

@@ -11,6 +11,9 @@ const ATALHOS = [
     { to: "/perfil", rotulo: "Perfil", id: "inicio-atalho-perfil" },
 ];
 
+// ----- INICIO == PERGUNTA SE O USUARIO DESEJA CRIAR OU ENTRAR EM UMA CONTA EXISTENTE  -----
+
+
 export default function Inicio() {
     const { contaId, conta, carregando, erro, recarregar } = useConta();
     const [saldoVisivel, setSaldoVisivel] = useState(true);
@@ -48,6 +51,8 @@ export default function Inicio() {
 
             {conta && (
                 <>
+
+                    {// que isso guys? }
                     <div id="inicio-cartao-saldo" className="comp-cartao comp-cartao-saldo">
                         <div className="comp-saldo-rotulo">
                             <span>Saldo disponível</span>

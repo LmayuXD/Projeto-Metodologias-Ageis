@@ -11,6 +11,8 @@ import {
 import {LayoutPagina, Carregando, EstadoSemConta, ErroCarregar} from "../Components/Layout.jsx";
 // Estilos: App.css, blocos "comp-*" (compartilhados) e "extrato-*" (desta página).
 
+// ----- EXTRATO == MOSTRA O HISTORICO DE TRANSAÇAO DA CONTA (PIX, CAIXINHA E RECEBIDOS) -----
+
 const FILTROS = [
   { id: "todos", rotulo: "Tudo" },
   { id: "PIX_ENVIADO", rotulo: "Pix enviados" },
