@@ -69,7 +69,13 @@ export default function Cadastro() {
                     {enviando ? "Cadastrando…" : "Cadastrar"}
                 </button>
 
+
+
             </form>
+
+            <div className="login-alternativa">
+                Já tem conta? <Link id="cadastro-link-login" to="/login">Entrar</Link>
+            </div>
 
             <footer className="cadastro-footer">
                 &copy; Todos os direitos reservados por Tech Girls.

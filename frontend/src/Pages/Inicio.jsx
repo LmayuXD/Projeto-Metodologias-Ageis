@@ -24,6 +24,9 @@ export default function Inicio() {
                 <Link className="botao-inicio" to={"/cadastro"}>
                     <button>Iniciar em NekoPay</button>
                 </Link>
+                <Link className="botao-inicio" to={"/login"}>
+                    <button>Já tenho conta</button>
+                </Link>
 
                 <footer className="cadastro-footer">
                     <p> &copy; Todos os direitos reservados por Tech Girls. </p>
