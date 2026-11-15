@@ -6,10 +6,9 @@ import { LayoutPagina, Carregando, ErroCarregar } from "../Components/Layout.jsx
 
 // ----- INICIO == PERGUNTA SE O USUARIO DESEJA CRIAR OU ENTRAR EM UMA CONTA EXISTENTE  -----
 
-
 export default function Inicio() {
 
-
+    const {contaId, conta, carregando, erro, recarregar} = useConta();
     // Sem conta ativa neste navegador: tela de boas-vindas
     if (!contaId) {
         return (
