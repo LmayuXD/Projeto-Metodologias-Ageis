@@ -31,7 +31,7 @@ function validar(nome, documento) {
   return erros;
 }
 
-export default function Perfil() {
+export default function EditarPerfil() {
   const navigate = useNavigate();
   const { contaId, conta, setConta, carregando, erro, recarregar } = useConta();
 

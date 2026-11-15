@@ -4,15 +4,17 @@ import { useConta, formatarMoeda } from "../Services/api.js";
 import { LayoutPagina, Carregando, ErroCarregar } from "../Components/Layout.jsx";
 import { App } from "../Services/App.css";
 // Estilos: App.css, blocos "comp-*" (compartilhados) e "inicio-*" (desta página).
-
-const ATALHOS = [
-    { to: "/transferencia", rotulo: "Transferir", id: "inicio-atalho-transferencia" },
-    { to: "/poupanca", rotulo: "Caixinha", id: "inicio-atalho-poupanca" },
-    { to: "/extrato", rotulo: "Extrato", id: "inicio-atalho-extrato" },
-    { to: "/perfil", rotulo: "Perfil", id: "inicio-atalho-perfil" },
-];
+export default function Perfil() {
+    const ATALHOS = [
+        {to: "/transferencia", rotulo: "Transferir", id: "inicio-atalho-transferencia"},
+        {to: "/poupanca", rotulo: "Caixinha", id: "inicio-atalho-poupanca"},
+        {to: "/extrato", rotulo: "Extrato", id: "inicio-atalho-extrato"},
+        {to: "/perfil", rotulo: "Perfil", id: "inicio-atalho-perfil"},
+    ];
 
     const primeiroNome = conta?.nomeTitular?.split(" ")[0];
+    const {contaId, conta, carregando, erro, recarregar} = useConta();
+    const [saldoVisivel, setSaldoVisivel] = useState(true);
 
     return (
         <LayoutPagina
@@ -20,13 +22,11 @@ const ATALHOS = [
             titulo={primeiroNome ? `Olá, ${primeiroNome}!` : "Olá!"}
             subtitulo="Bem-vindo(a) de volta ao NekoPay."
         >
-            {carregando && !conta && <Carregando />}
-            {erro && !conta && <ErroCarregar mensagem={erro} aoTentarNovamente={recarregar} />}
+            {carregando && !conta && <Carregando/>}
+            {erro && !conta && <ErroCarregar mensagem={erro} aoTentarNovamente={recarregar}/>}
 
             {conta && (
                 <>
-
-                    {// que isso guys? }
                     <div id="inicio-cartao-saldo" className="comp-cartao comp-cartao-saldo">
                         <div className="comp-saldo-rotulo">
                             <span>Saldo disponível</span>
@@ -57,3 +57,4 @@ const ATALHOS = [
             )}
         </LayoutPagina>
     );
+}

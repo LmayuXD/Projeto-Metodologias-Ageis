@@ -8,8 +8,7 @@ import { LayoutPagina, Carregando, ErroCarregar } from "../Components/Layout.jsx
 
 
 export default function Inicio() {
-    const { contaId, conta, carregando, erro, recarregar } = useConta();
-    const [saldoVisivel, setSaldoVisivel] = useState(true);
+
 
     // Sem conta ativa neste navegador: tela de boas-vindas
     if (!contaId) {
@@ -30,3 +29,4 @@ export default function Inicio() {
             </div>
         );
     }
+}
