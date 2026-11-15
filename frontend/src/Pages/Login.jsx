@@ -5,8 +5,6 @@ export default function login() {
 
 // ----- LOGIN  == CADASTRO DE >>NOVOS<<  USUARIOS!  -----
 
-
-
     return (
         <div className="cadastro-page">
 

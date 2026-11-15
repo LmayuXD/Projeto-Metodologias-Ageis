@@ -68,6 +68,14 @@ export default function Cadastro() {
                        onChange={handleChange}
                 />
 
+                <label> Senha </label>
+                <input className="form-input"
+                                       name="documento"
+                                       placeholder="CPF ou CNPJ"
+                                       value={form.documento}
+                                       onChange={handleChange}
+                                />
+
                 <button className="btn-cadastrar" type="submit" disabled={enviando}>
                     {enviando ? "Cadastrando…" : "Cadastrar"}
                 </button>

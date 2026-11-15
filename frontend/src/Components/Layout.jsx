@@ -9,7 +9,7 @@ const ITENS_DO_MENU = [
   { to: "/transferencia", rotulo: "Transferência", icone: "⇄", id: "layout-menu-item-transferencia" },
   { to: "/poupanca", rotulo: "Poupança", icone: "🐖", id: "layout-menu-item-poupanca" },
   { to: "/extrato", rotulo: "Extrato", icone: "🧾", id: "layout-menu-item-extrato" },
-  { to: "/perfil", rotulo: "Perfil", icone: "👤", id: "layout-menu-item-perfil" },
+  { to: "/editarperfil", rotulo: "Editar Perfil", icone: "👤", id: "layout-menu-item-perfil" },
 ];
 
 export function LayoutPagina({ idPagina, titulo, subtitulo, voltarPara, children }) {
