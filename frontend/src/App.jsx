@@ -1,5 +1,13 @@
 
 import "./App.css";
+import "./Pages/Cadastro.css"
+import "./Pages/Editarperfil.css"
+import "./Pages/Extrato.css"
+import "./Pages/Inicio.css"
+import "./Pages/Login.css"
+import "./Pages/Poupanca.css"
+import "./Pages/Transferencia.css"
+
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Cadastro from "./Pages/Cadastro.jsx";
 import Inicio from "./Pages/Inicio.jsx";
