@@ -6,11 +6,6 @@ import controller.TransferenciaController;
 import model.Conta;
 import model.Poupanca;
 
-/**
- * Testes do módulo de poupança ("caixinha"): model.Poupanca e controller.PoupancaController.
- * Padrão: Java puro com main, igual ao TesteConta. Cada teste recebe controllers novos
- * (prepararCenario), então nenhum teste depende de outro nem da ordem de execução.
- */
 public class TestePoupanca {
 
     private static ContaController contaController;
@@ -90,8 +85,9 @@ public class TestePoupanca {
     private static void prepararCenario() {
         contaController = new ContaController();
         poupancaController = new PoupancaController(contaController);
-        conta1 = contaController.criarConta("Maria Silva", "12345678901");
-        conta2 = contaController.criarConta("João Pedro", "98765432100");
+        // Atualizado para incluir a senha exigida pelo método criarConta
+        conta1 = contaController.criarConta("Maria Silva", "12345678901", "senha12345");
+        conta2 = contaController.criarConta("João Pedro", "98765432100", "senha12345");
     }
 
     // valores que guardar/resgatar devem rejeitar
@@ -456,6 +452,12 @@ public class TestePoupanca {
     private static void assertEquals(double esperado, double atual, double margem) {
         if (Math.abs(esperado - atual) > margem) {
             throw new AssertionError("esperado <" + esperado + "> mas foi <" + atual + ">");
+        }
+    }
+
+    private static void setSame(Object esperado, Object atual) {
+        if (esperado != atual) {
+            throw new AssertionError("os objetos deveriam ser o mesmo");
         }
     }
 

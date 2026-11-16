@@ -23,6 +23,9 @@ public class TesteConta {
         rodar("rejeitaDocumentoVazioOuNulo", TesteConta::rejeitaDocumentoVazioOuNulo);
         rodar("rejeitaDocumentoComCaracteresInvalidos", TesteConta::rejeitaDocumentoComCaracteresInvalidos);
         rodar("rejeitaDocumentoComQuantidadeErradaDeDigitos", TesteConta::rejeitaDocumentoComQuantidadeErradaDeDigitos);
+        rodar("aceitaSenhaValida", TesteConta::aceitaSenhaValida);
+        rodar("rejeitaSenhaVaziaOuNula", TesteConta::rejeitaSenhaVaziaOuNula);
+        rodar("rejeitaSenhaComMenosDe8Caracteres", TesteConta::rejeitaSenhaComMenosDe8Caracteres);
         rodar("saldoPadraoE500", TesteConta::saldoPadraoE500);
         rodar("aceitaSaldoZeroOuPositivo", TesteConta::aceitaSaldoZeroOuPositivo);
         rodar("rejeitaSaldoInvalido", TesteConta::rejeitaSaldoInvalido);
@@ -46,7 +49,7 @@ public class TesteConta {
     }
 
     private static void criarConta() {
-        conta = new Conta(1L, "Maria Silva", "12345678901");
+        conta = new Conta(1L, "Maria Silva", "12345678901", "senha12345");
     }
 
     // ------------------------------------------------------------ construtor
@@ -54,13 +57,15 @@ public class TesteConta {
         assertEquals(1L, conta.getId());
         assertEquals("Maria Silva", conta.getNomeTitular());
         assertEquals("12345678901", conta.getDocumento());
+        assertEquals("senha12345", conta.getSenha());
         assertEquals(500.0, conta.getSaldoInicial());
     }
 
     private static void construtorRepassaAsValidacoes() {
-        assertThrows(IllegalArgumentException.class, () -> new Conta(0L, "Maria Silva", "12345678901"));
-        assertThrows(IllegalArgumentException.class, () -> new Conta(1L, "A1", "12345678901"));
-        assertThrows(IllegalArgumentException.class, () -> new Conta(1L, "Maria Silva", "123"));
+        assertThrows(IllegalArgumentException.class, () -> new Conta(0L, "Maria Silva", "12345678901", "senha12345"));
+        assertThrows(IllegalArgumentException.class, () -> new Conta(1L, "A1", "12345678901", "senha12345"));
+        assertThrows(IllegalArgumentException.class, () -> new Conta(1L, "Maria Silva", "123", "senha12345"));
+        assertThrows(IllegalArgumentException.class, () -> new Conta(1L, "Maria Silva", "12345678901", "curta"));
     }
 
     // -------------------------------------------------------------------- id
@@ -152,6 +157,30 @@ public class TesteConta {
         }
     }
 
+    // ----------------------------------------------------------------- senha
+    private static void aceitaSenhaValida() {
+        for (String senha : new String[]{"12345678", "senhaSegura123", "abcde$#@1"}) {
+            conta.setSenha(senha);
+            assertEquals(senha, conta.getSenha());
+        }
+    }
+
+    private static void rejeitaSenhaVaziaOuNula() {
+        for (String senha : new String[]{null, "", "   "}) {
+            IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                    () -> conta.setSenha(senha));
+            assertTrue(e.getMessage().contains("vazia"));
+        }
+    }
+
+    private static void rejeitaSenhaComMenosDe8Caracteres() {
+        for (String senha : new String[]{"123", "1234567", "abc"}) {
+            IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                    () -> conta.setSenha(senha));
+            assertTrue(e.getMessage().contains("8 caracteres"));
+        }
+    }
+
     // ----------------------------------------------------------------- saldo
     private static void saldoPadraoE500() {
         assertEquals(500.0, conta.getSaldoInicial());
@@ -175,11 +204,13 @@ public class TesteConta {
         assertThrows(IllegalArgumentException.class, () -> conta.setId(-1L));
         assertThrows(IllegalArgumentException.class, () -> conta.setNomeTitular("X1"));
         assertThrows(IllegalArgumentException.class, () -> conta.setDocumento("123"));
+        assertThrows(IllegalArgumentException.class, () -> conta.setSenha("12345"));
         assertThrows(IllegalArgumentException.class, () -> conta.setSaldoInicial(-10));
 
         assertEquals(1L, conta.getId());
         assertEquals("Maria Silva", conta.getNomeTitular());
         assertEquals("12345678901", conta.getDocumento());
+        assertEquals("senha12345", conta.getSenha());
         assertEquals(500.0, conta.getSaldoInicial());
     }
 

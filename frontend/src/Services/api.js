@@ -31,10 +31,10 @@ const json = (corpo) => JSON.stringify(corpo);
 
 // ---------- Serviços ----------
 export const contasService = {
-    cadastrar: (nomeTitular, documento) =>
-        requisicao("/api/contas", { method: "POST", body: json({ nomeTitular, documento }) }),
-    login: (documento) =>
-            requisicao("/api/login", { method: "POST", body: json({ documento }) }),
+    cadastrar: (nomeTitular, documento, senha) =>
+        requisicao("/api/contas", { method: "POST", body: json({ nomeTitular, documento, senha }) }),
+    login: (documento, senha) =>
+            requisicao("/api/login", { method: "POST", body: json({ documento, senha }) }),
     buscar: (id) => requisicao(`/api/contas/${id}`),
     atualizar: (id, nomeTitular, documento) =>
         requisicao(`/api/contas/${id}`, { method: "PUT", body: json({ nomeTitular, documento }) }),

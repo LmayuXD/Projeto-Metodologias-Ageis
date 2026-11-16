@@ -16,6 +16,9 @@ public class TesteLogin {
         rodar("buscarPorDocumentoEncontraContaIgnorandoFormatacao", TesteLogin::buscarPorDocumentoEncontraContaIgnorandoFormatacao);
         rodar("buscarPorDocumentoRetornaNuloSeNaoExistir", TesteLogin::buscarPorDocumentoRetornaNuloSeNaoExistir);
         rodar("buscarPorDocumentoLidaComNuloComSeguranca", TesteLogin::buscarPorDocumentoLidaComNuloComSeguranca);
+        rodar("realizarLoginComSucesso", TesteLogin::realizarLoginComSucesso);
+        rodar("realizarLoginRejeitaSenhaIncorreta", TesteLogin::realizarLoginRejeitaSenhaIncorreta);
+        rodar("realizarLoginRejeitaContaInexistente", TesteLogin::realizarLoginRejeitaContaInexistente);
         rodar("atualizarContaModificaDadosComSucesso", TesteLogin::atualizarContaModificaDadosComSucesso);
         rodar("deletarContaRemoveDaLista", TesteLogin::deletarContaRemoveDaLista);
         rodar("listarContasRetornaTodasAsContasCadastradas", TesteLogin::listarContasRetornaTodasAsContasCadastradas);
@@ -43,17 +46,18 @@ public class TesteLogin {
 
     // ---------------------------------------------------------------- criar conta
     private static void criarContaComSucessoEDefineSaldo500() {
-        Conta c = controller.criarConta("Maria Silva", "12345678901");
+        Conta c = controller.criarConta("Maria Silva", "12345678901", "senha12345");
         assertEquals(1L, c.getId());
         assertEquals("Maria Silva", c.getNomeTitular());
         assertEquals("12345678901", c.getDocumento());
+        assertEquals("senha12345", c.getSenha());
         assertEquals(500.0, c.getSaldoInicial());
     }
 
     // ---------------------------------------------------------------- buscar por id
     private static void buscarPorIdRetornaContaCorreta() {
-        controller.criarConta("Maria Silva", "12345678901");
-        controller.criarConta("João Santos", "98765432100");
+        controller.criarConta("Maria Silva", "12345678901", "senha12345");
+        controller.criarConta("João Santos", "98765432100", "senha67890");
 
         Conta encontrada = controller.buscarPorId(2L);
         assertTrue(encontrada != null);
@@ -67,14 +71,14 @@ public class TesteLogin {
 
     // ---------------------------------------------------------------- buscar por documento (Login)
     private static void buscarPorDocumentoEncontraContaExata() {
-        controller.criarConta("Maria Silva", "12345678901");
+        controller.criarConta("Maria Silva", "12345678901", "senha12345");
         Conta encontrada = controller.buscarPorDocumento("12345678901");
         assertTrue(encontrada != null);
         assertEquals("Maria Silva", encontrada.getNomeTitular());
     }
 
     private static void buscarPorDocumentoEncontraContaIgnorandoFormatacao() {
-        controller.criarConta("Carlos Souza", "123.456.789-01");
+        controller.criarConta("Carlos Souza", "123.456.789-01", "senha12345");
 
         // Deve encontrar tanto buscando limpo quanto formatado
         Conta encontrada1 = controller.buscarPorDocumento("12345678901");
@@ -86,7 +90,7 @@ public class TesteLogin {
     }
 
     private static void buscarPorDocumentoRetornaNuloSeNaoExistir() {
-        controller.criarConta("Maria Silva", "12345678901");
+        controller.criarConta("Maria Silva", "12345678901", "senha12345");
         Conta encontrada = controller.buscarPorDocumento("00000000000");
         assertTrue(encontrada == null);
     }
@@ -96,10 +100,31 @@ public class TesteLogin {
         assertTrue(encontrada == null);
     }
 
+    // ---------------------------------------------------------------- realizar login
+    private static void realizarLoginComSucesso() {
+        controller.criarConta("Maria Silva", "12345678901", "senha12345");
+        Conta logada = controller.realizarLogin("12345678901", "senha12345");
+        assertTrue(logada != null);
+        assertEquals("Maria Silva", logada.getNomeTitular());
+    }
+
+    private static void realizarLoginRejeitaSenhaIncorreta() {
+        controller.criarConta("Maria Silva", "12345678901", "senha12345");
+        assertThrows(IllegalArgumentException.class, () ->
+                controller.realizarLogin("12345678901", "senhaErrada")
+        );
+    }
+
+    private static void realizarLoginRejeitaContaInexistente() {
+        assertThrows(IllegalArgumentException.class, () ->
+                controller.realizarLogin("00000000000", "senha12345")
+        );
+    }
+
     // ---------------------------------------------------------------- atualizar
     private static void atualizarContaModificaDadosComSucesso() {
-        controller.criarConta("Maria Silva", "12345678901");
-        Conta atualizacao = new Conta(1L, "Maria Silva Sauro", "12345678901");
+        controller.criarConta("Maria Silva", "12345678901", "senha12345");
+        Conta atualizacao = new Conta(1L, "Maria Silva Sauro", "12345678901", "senha12345");
         Conta atualizada = controller.atualizarConta(1L, atualizacao);
 
         assertTrue(atualizada != null);
@@ -108,7 +133,7 @@ public class TesteLogin {
 
     // ---------------------------------------------------------------- deletar
     private static void deletarContaRemoveDaLista() {
-        controller.criarConta("Maria Silva", "12345678901");
+        controller.criarConta("Maria Silva", "12345678901", "senha12345");
         boolean deletado = controller.deletarConta(1L);
         assertTrue(deletado);
         assertTrue(controller.listarContas().isEmpty());
@@ -116,8 +141,8 @@ public class TesteLogin {
 
     // ---------------------------------------------------------------- listar
     private static void listarContasRetornaTodasAsContasCadastradas() {
-        controller.criarConta("Ana", "11122233344");
-        controller.criarConta("Bruno", "55566677788");
+        controller.criarConta("Ana", "11122233344", "senha12345");
+        controller.criarConta("Bruno", "55566677788", "senha12345");
         List<Conta> lista = controller.listarContas();
         assertEquals(2, lista.size());
     }

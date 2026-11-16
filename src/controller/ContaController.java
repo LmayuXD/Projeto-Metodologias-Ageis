@@ -14,13 +14,14 @@ public class ContaController {
     private static final double saldoInicial = 500.00;
 
     // 1. CREATE - Cadastrar uma nova conta com validação de dados obrigatórios
-    public Conta criarConta(String nomeTitular, String documento) {
+    public Conta criarConta(String nomeTitular, String documento, String senha) {
 
         // Cria uma nova conta
         Conta novaConta = new Conta(
                 (long) (contas.size() + 1),
                 nomeTitular,
-                documento
+                documento,
+                senha
         );
 
         // Validação: Verifica se o nome do titular está vazio ou nulo
@@ -42,6 +43,21 @@ public class ContaController {
 
         contas.add(novaConta);
         return novaConta;
+    }
+
+    // 1.1. LOGIN - Autenticar usuário por documento e senha
+    public Conta realizarLogin(String documento, String senha) {
+        Conta conta = buscarPorDocumento(documento);
+
+        if (conta == null) {
+            throw new IllegalArgumentException("Conta não encontrada para este documento.");
+        }
+
+        if (conta.getSenha() == null || !conta.getSenha().equals(senha)) {
+            throw new IllegalArgumentException("Senha incorreta.");
+        }
+
+        return conta;
     }
 
     // 2. READ ALL - Listar todas as contas
@@ -91,6 +107,10 @@ public class ContaController {
 
                 if (contaAtualizada.getDocumento() != null) {
                     contaExistente.setDocumento(contaAtualizada.getDocumento());
+                }
+
+                if (contaAtualizada.getSenha() != null) {
+                    contaExistente.setSenha(contaAtualizada.getSenha());
                 }
 
                 return contaExistente; // Retorna a conta com os dados atualizados

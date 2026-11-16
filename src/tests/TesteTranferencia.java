@@ -56,8 +56,8 @@ public class TesteTranferencia {
     private static void prepararCenario() {
         contaController = new ContaController();
         transferenciaController = new TransferenciaController(contaController);
-        origem = contaController.criarConta("Aron Eren", "102.999.778-56");
-        destino = contaController.criarConta("Mikasa Ackerman", "20388866654");
+        origem = contaController.criarConta("Aron Eren", "102.999.778-56", "senha12345");
+        destino = contaController.criarConta("Mikasa Ackerman", "20388866654", "senha12345");
     }
 
     // =====================================================================

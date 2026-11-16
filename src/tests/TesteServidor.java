@@ -25,6 +25,7 @@ public class TesteServidor {
 
         testeCors();
         testeContas();
+        testeLogin();
         testePoupanca();
         testePix();
 
@@ -55,7 +56,8 @@ public class TesteServidor {
         Resp r = enviar("GET", "/api/contas", null);
         check("lista começa vazia", r.status() == 200 && r.corpo().isArray() && r.corpo().size() == 0);
 
-        r = enviar("POST", "/api/contas", "{\"nomeTitular\":\"Maria Silva\",\"documento\":\"12345678901\"}");
+        // Adicionada a senha válida (8+ caracteres) em todas as criações
+        r = enviar("POST", "/api/contas", "{\"nomeTitular\":\"Maria Silva\",\"documento\":\"12345678901\",\"senha\":\"senha12345\"}");
         check("POST cria conta -> 201", r.status() == 201);
         check("conta 1 com nome e documento corretos",
                 r.corpo().get("id").asLong() == 1
@@ -63,13 +65,13 @@ public class TesteServidor {
                         && r.corpo().get("documento").asText().equals("12345678901"));
         check("conta nasce com saldoInicial 500", r.corpo().get("saldoInicial").asDouble() == 500.0);
 
-        r = enviar("POST", "/api/contas", "{\"nomeTitular\":\"João Pedro\",\"documento\":\"98765432100\"}");
+        r = enviar("POST", "/api/contas", "{\"nomeTitular\":\"João Pedro\",\"documento\":\"98765432100\",\"senha\":\"senha12345\"}");
         check("segunda conta tem id 2 (e aceita acento)",
                 r.status() == 201 && r.corpo().get("id").asLong() == 2
                         && r.corpo().get("nomeTitular").asText().equals("João Pedro"));
 
         r = enviar("POST", "/api/contas",
-                "{\"nomeTitular\":\"Ana Clara\",\"documento\":\"11122233344\",\"saldoInicial\":99999}");
+                "{\"nomeTitular\":\"Ana Clara\",\"documento\":\"11122233344\",\"senha\":\"senha12345\",\"saldoInicial\":99999}");
         check("campos extras (saldoInicial) enviados pelo cliente são ignorados",
                 r.status() == 201 && r.corpo().get("saldoInicial").asDouble() == 500.0);
 
@@ -86,17 +88,20 @@ public class TesteServidor {
         r = enviar("GET", "/api/contas/abc", null);
         check("GET id não numérico -> 400", r.status() == 400 && r.corpo().has("erro"));
 
-        r = enviar("POST", "/api/contas", "{\"nomeTitular\":\"A1\",\"documento\":\"12345678901\"}");
+        r = enviar("POST", "/api/contas", "{\"nomeTitular\":\"A1\",\"documento\":\"12345678901\",\"senha\":\"senha12345\"}");
         check("nome inválido -> 400 com mensagem de validação",
                 r.status() == 400 && r.corpo().get("erro").asText().contains("nome"));
 
-        r = enviar("POST", "/api/contas", "{\"nomeTitular\":\"Carlos Lima\",\"documento\":\"123\"}");
+        r = enviar("POST", "/api/contas", "{\"nomeTitular\":\"Carlos Lima\",\"documento\":\"123\",\"senha\":\"senha12345\"}");
         check("documento inválido -> 400", r.status() == 400 && r.corpo().has("erro"));
 
-        r = enviar("POST", "/api/contas", "{\"nomeTitular\":\"\",\"documento\":\"\"}");
+        r = enviar("POST", "/api/contas", "{\"nomeTitular\":\"Carlos Lima\",\"documento\":\"12345678901\",\"senha\":\"123\"}");
+        check("senha com menos de 8 caracteres -> 400", r.status() == 400 && r.corpo().has("erro"));
+
+        r = enviar("POST", "/api/contas", "{\"nomeTitular\":\"\",\"documento\":\"\",\"senha\":\"\"}");
         check("campos vazios -> 400", r.status() == 400);
 
-        r = enviar("POST", "/api/contas", "{\"documento\":\"12345678901\"}");
+        r = enviar("POST", "/api/contas", "{\"documento\":\"12345678901\",\"senha\":\"senha12345\"}");
         check("nome ausente -> 400", r.status() == 400 && r.corpo().has("erro"));
 
         r = enviar("POST", "/api/contas", "{isso não é json");
@@ -111,6 +116,23 @@ public class TesteServidor {
 
         r = enviar("DELETE", "/api/contas/1", null);
         check("método não suportado -> 404", r.status() == 404);
+    }
+
+    // ------------------------------------------------------------------ login
+    public static void testeLogin() throws Exception {
+        titulo("/api/login");
+
+        Resp r = enviar("POST", "/api/login", "{\"documento\":\"12345678901\",\"senha\":\"senha12345\"}");
+        check("login com credenciais corretas -> 200", r.status() == 200 && r.corpo().get("id").asLong() == 1);
+
+        r = enviar("POST", "/api/login", "{\"documento\":\"12345678901\",\"senha\":\"senhaerrada\"}");
+        check("login com senha incorreta -> 400", r.status() == 400 && r.corpo().get("erro").asText().contains("Senha incorreta"));
+
+        r = enviar("POST", "/api/login", "{\"documento\":\"00000000000\",\"senha\":\"senha12345\"}");
+        check("login com documento inexistente -> 404", r.status() == 404 && r.corpo().has("erro"));
+
+        r = enviar("POST", "/api/login", "{\"documento\":\"\",\"senha\":\"\"}");
+        check("login com campos vazios -> 400", r.status() == 400);
     }
 
     // -------------------------------------------------------------- poupança

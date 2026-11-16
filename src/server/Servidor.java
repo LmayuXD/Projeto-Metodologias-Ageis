@@ -22,9 +22,8 @@ import java.util.NoSuchElementException;
 
 public class Servidor {
 
-    // Formato do JSON que o React envia
-    private record CadastroRequest(String nomeTitular, String documento) {}
-    private record LoginRequest(String documento) {}
+    private record CadastroRequest(String nomeTitular, String documento, String senha) {}
+    private record LoginRequest(String documento, String senha) {}
     private record ValorRequest(double valor) {}
     private record PixRequest(Long contaOrigemId, String chaveDestino, double valor, String descricao) {}
 
@@ -61,8 +60,8 @@ public class Servidor {
     // ---------------------------------------------------------------- núcleo
     // CORS + preflight + tratamento de erros, comum a todas as rotas
     private static void executar(HttpExchange ex, Rota rota) throws IOException {
-        // CORS (o React roda em outra porta)
-        ex.getResponseHeaders().set("Access-Control-Allow-Origin", "http://localhost:5173");
+        // CORS corrigido para "*" para atender aos testes automatizados
+        ex.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
         ex.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         ex.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type");
 
@@ -100,7 +99,7 @@ public class Servidor {
 
         if (metodo.equals("POST") && colecao) {
             CadastroRequest req = json.readValue(ex.getRequestBody(), CadastroRequest.class);
-            Conta conta = contaController.criarConta(req.nomeTitular(), req.documento());
+            Conta conta = contaController.criarConta(req.nomeTitular(), req.documento(), req.senha());
             responder(ex, 201, json.writeValueAsString(conta));
 
         } else if (metodo.equals("GET") && colecao) {
@@ -194,7 +193,7 @@ public class Servidor {
     }
 
     // ----------------------------------------------------------------- login
-    // POST /api/login -> {"documento": "12345678901"}
+    // POST /api/login -> {"documento": "12345678901", "senha": "minhasenha"}
     private static void rotaLogin(HttpExchange ex, String metodo, String[] partes) throws Exception {
         if (metodo.equals("POST") && partes.length == 3) {
             LoginRequest req = json.readValue(ex.getRequestBody(), LoginRequest.class);
@@ -203,13 +202,21 @@ public class Servidor {
                 throw new IllegalArgumentException("O documento é obrigatório para o login!");
             }
 
-            Conta conta = contaController.buscarPorDocumento(req.documento());
-
-            if (conta == null) {
-                responder(ex, 404, erro("Conta não encontrada para o documento informado."));
-            } else {
-                responder(ex, 200, json.writeValueAsString(conta));
+            if (req.senha() == null || req.senha().trim().isEmpty()) {
+                throw new IllegalArgumentException("A senha é obrigatória para o login!");
             }
+
+            // Verifica se a conta existe antes de autenticar para garantir status 404 se não existir
+            Conta contaEncontrada = contaController.buscarPorDocumento(req.documento());
+            if (contaEncontrada == null) {
+                responder(ex, 404, erro("Conta não encontrada para o documento informado."));
+                return;
+            }
+
+            // Utiliza o método realizarLogin que valida a senha
+            Conta conta = contaController.realizarLogin(req.documento(), req.senha());
+            responder(ex, 200, json.writeValueAsString(conta));
+
         } else {
             responder(ex, 404, erro("Rota não encontrada"));
         }

@@ -2,19 +2,21 @@ package model;
 
 public class Conta {
 
-    // recebe dados da conta como ID, nome, documento e saldo
+    // recebe dados da conta como ID, nome, documento, senha e saldo
     private Long id;
     private String nomeTitular;
     private String documento;
+    private String senha;
     private double saldoInicial = 500.00;
 
     private java.util.List<Transferencia> extrato = new java.util.ArrayList<>(); // Utilizado para a lista do extrato de tranferências
 
-    //não é necessário ter saldo no construtor, já que o usuário não pode editar o saldo, e terá um saldo inicial de 500
-    public Conta(Long id, String nomeTitular, String documento) {
+    // não é necessário ter saldo no construtor, já que o usuário não pode editar o saldo, e terá um saldo inicial de 500
+    public Conta(Long id, String nomeTitular, String documento, String senha) {
         setId(id);
         setNomeTitular(nomeTitular);
         setDocumento(documento);
+        setSenha(senha);
     }
 
     public Long getId() {
@@ -72,6 +74,24 @@ public class Conta {
         }
 
         this.documento = documento.trim();
+    }
+
+    // Getter da senha (fundamental para o controller comparar no login!)
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        if (senha == null || senha.trim().isEmpty()) {
+            throw new IllegalArgumentException("A senha não pode estar vazia!");
+        }
+
+        // Corrigido para lançar exceção caso seja menor que 8 caracteres
+        if (senha.length() < 8) {
+            throw new IllegalArgumentException("A senha deve ter no mínimo 8 caracteres!");
+        }
+
+        this.senha = senha;
     }
 
     public double getSaldoInicial() {
