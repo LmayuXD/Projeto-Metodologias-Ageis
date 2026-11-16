@@ -1,255 +1,214 @@
 import { useState, useEffect } from "react";
-import "../App.css";
-import"./Poupanca.css"
+import { Link } from "react-router-dom";
+import {
+  useConta,
+  poupancaService,
+  formatarMoeda,
+  lerValor,
+} from "../Services/api.js";
 
-export default function Poupanca({ contaId, onVoltar }) {
+import "./Poupanca.css";
+import { LayoutPagina, Carregando, EstadoSemConta, ErroCarregar } from "../Components/Layout.jsx";
+// Estilos: App.css, blocos "comp-*" (compartilhados) e estilos da aplicação.
 
-    // ----- POUPANÇA  == COFRINHO  -----
+export default function Poupanca() {
+  const { contaId, conta, carregando, erro, recarregar } = useConta();
 
+  const [saldoPoupanca, setSaldoPoupanca] = useState(0);
+  const [valorTxt, setValorTxt] = useState("");
+  const [operacao, setOperacao] = useState("guardar"); // "guardar" | "resgatar"
+  const [enviando, setEnviando] = useState(false);
+  const [mensagemErro, setMensagemErro] = useState("");
+  const [mensagemSucesso, setMensagemSucesso] = useState("");
 
-    const [saldoPoupanca, setSaldoPoupanca] = useState(0);
-    const [valor, setValor] = useState("");
+  const VALORES_RAPIDOS = [50, 100, 200];
+  const valor = lerValor(valorTxt);
 
-    const [mensagemErro, setMensagemErro] = useState("");
-    const [mensagemSucesso, setMensagemSucesso] = useState("");
+  async function consultarPoupanca() {
+    if (!contaId) return;
+    try {
+      const dados = await poupancaService.consultar(contaId);
+      setSaldoPoupanca(dados.saldo || 0);
+    } catch (err) {
+      setMensagemErro(err.message);
+    }
+  }
 
-    // Consultar saldo da poupança
-    async function consultarPoupanca() {
-        try {
-            const resposta = await fetch(
-                `http://localhost:8080/poupanca/${contaId}`
-            );
+  useEffect(() => {
+    if (contaId) {
+      consultarPoupanca();
+    }
+  }, [contaId]);
 
-            const dados = await resposta.json();
+  async function movimentar(ev) {
+    ev.preventDefault();
+    setMensagemErro("");
+    setMensagemSucesso("");
 
-            if (!resposta.ok) {
-                throw new Error(dados.erro || "Erro ao consultar poupança.");
-            }
-
-            setSaldoPoupanca(dados.saldo);
-
-        } catch (erro) {
-            setMensagemErro(erro.message);
-        }
+    if (!valorTxt.trim()) {
+      setMensagemErro("Informe o valor.");
+      return;
+    } else if (Number.isNaN(valor) || valor <= 0) {
+      setMensagemErro("Valor inválido. Use no máximo 2 casas decimais (ex.: 25,90).");
+      return;
     }
 
-    // Guardar dinheiro
-    async function guardarDinheiro() {
-        try {
-            setMensagemErro("");
-            setMensagemSucesso("");
-
-            if (valor === "" || Number(valor) <= 0) {
-                setMensagemErro("Digite um valor válido.");
-                return;
-            }
-
-            const resposta = await fetch(
-                "http://localhost:8080/poupanca/guardar",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        contaId: contaId,
-                        valor: Number(valor)
-                    })
-                }
-            );
-            const dados = await resposta.json();
-
-            if (!resposta.ok) {
-                throw new Error(dados.erro || "Erro ao guardar dinheiro.");
-            }
-
-            setSaldoPoupanca(dados.saldo);
-            setValor("");
-
-            setMensagemSucesso("Dinheiro guardado com sucesso!");
-
-        } catch (erro) {
-            setMensagemErro(erro.message);
-        }
+    if (operacao === "guardar" && conta && valor > conta.saldo) {
+      setMensagemErro("Saldo insuficiente na conta para guardar este valor.");
+      return;
     }
 
-    // Resgatar dinheiro
-    async function resgatarDinheiro() {
-        try {
-            setMensagemErro("");
-            setMensagemSucesso("");
-
-            // Verifica se o valor foi preenchido
-            if (valor === "" || Number(valor) <= 0) {
-                setMensagemErro("Digite um valor válido.");
-                return;
-            }
-
-            // Envia a solicitação para o backend
-            const resposta = await fetch(
-                "http://localhost:8080/poupanca/resgatar",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        contaId: contaId,
-                        valor: Number(valor)
-                    })
-                }
-            );
-
-            const dados = await resposta.json();
-
-            // Verifica se ocorreu algum erro
-            if (!resposta.ok) {
-                throw new Error(
-                    dados.erro || "Erro ao resgatar dinheiro."
-                );
-            }
-
-            // Atualiza o saldo da poupança
-            setSaldoPoupanca(dados.saldo);
-
-            // Limpa o campo de valor
-            setValor("");
-
-            setMensagemSucesso("Dinheiro resgatado com sucesso!");
-
-        } catch (erro) {
-            setMensagemErro(erro.message);
-        }
+    if (operacao === "resgatar" && valor > saldoPoupanca) {
+      setMensagemErro("Você não possui saldo suficiente na poupança para este resgate.");
+      return;
     }
 
-    // Consultar poupança ao abrir a tela
-    useEffect(() => {
-        consultarPoupanca();
-    }, []);
+    if (enviando) return;
+    setEnviando(true);
 
-    return (
-        <main className="pagina-poupanca">
+    try {
+      let dados;
+      if (operacao === "guardar") {
+        dados = await poupancaService.guardar(Number(contaId), valor);
+        setMensagemSucesso("Dinheiro guardado com sucesso!");
+      } else {
+        dados = await poupancaService.resgatar(Number(contaId), valor);
+        setMensagemSucesso("Dinheiro resgatado com sucesso!");
+      }
+      setSaldoPoupanca(dados.saldo || 0);
+      setValorTxt("");
+      recarregar(); // Atualiza o saldo da conta principal no topo/contexto
+    } catch (err) {
+      setMensagemErro(err.message);
+    } finally {
+      setEnviando(false);
+    }
+  }
 
-            <header className="cabecalho-poupanca">
-                <div className="logo-nekopay">
-                    🐱 NekoPay
-                </div>
+  return (
+    <LayoutPagina
+      idPagina="pagina-poupanca"
+      titulo="Minha Poupança"
+      subtitulo="Guarde hoje, colha amanhã."
+      voltarPara="/"
+    >
+      {carregando && !conta && <Carregando />}
+      {erro && !conta && <ErroCarregar mensagem={erro} aoTentarNovamente={recarregar} />}
+      {!contaId && <EstadoSemConta />}
 
-                {onVoltar && (
-                    <button
-                        className="botao-voltar"
-                        onClick={onVoltar}
-                    >
-                        ☰
-                    </button>
-                )}
-            </header>
+      {conta && (
+        <>
+          <div className="resumo-poupanca comp-pilha" style={{ display: "grid", gap: "1rem", gridTemplateColumns: "1fr 1fr" }}>
+            <div className="comp-cartao comp-cartao-saldo">
+              <div className="comp-saldo-rotulo"><span>Saldo da conta</span></div>
+              <p className="comp-saldo-valor">{formatarMoeda(conta.saldo)}</p>
+            </div>
 
-            <section className="titulo-poupanca">
-                <h2>Minha Poupança</h2>
-                <p>Guarde hoje, colha amanhã.</p>
-            </section>
+            <div className="comp-cartao comp-cartao-saldo">
+              <div className="comp-saldo-rotulo"><span>Dinheiro guardado</span></div>
+              <p className="comp-saldo-valor">{formatarMoeda(saldoPoupanca)}</p>
+            </div>
+          </div>
 
-            {/* Cartões de saldo */}
-            <section className="resumo-poupanca">
+          <div id="poupanca-abas" className="transferencia-abas" role="tablist" aria-label="Operação da poupança" style={{ margin: "1.5rem 0" }}>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={operacao === "guardar"}
+              className={`transferencia-aba ${operacao === "guardar" ? "ativo" : ""}`}
+              onClick={() => {
+                setOperacao("guardar");
+                setMensagemErro("");
+                setMensagemSucesso("");
+              }}
+            >
+              Guardar
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={operacao === "resgatar"}
+              className={`transferencia-aba ${operacao === "resgatar" ? "ativo" : ""}`}
+              onClick={() => {
+                setOperacao("resgatar");
+                setMensagemErro("");
+                setMensagemSucesso("");
+              }}
+            >
+              Resgatar
+            </button>
+          </div>
 
-                <div className="cartao-saldo">
-                    <span>♧</span>
-                    <p>Saldo da conta</p>
-                    <h3>{formatarMoeda(saldoConta)}</h3>
-                </div>
+          {mensagemErro && (
+            <div className="comp-alerta comp-alerta-erro" role="alert">
+              <span className="comp-alerta-icone" aria-hidden="true">!</span>
+              <div>
+                <strong className="comp-alerta-titulo">Atenção</strong>
+                {mensagemErro}
+              </div>
+            </div>
+          )}
 
-                <div className="cartao-saldo dinheiro-guardado">
-                    <span>🐱</span>
-                    <p>Dinheiro guardado</p>
-                    <h3>{formatarMoeda(saldoPoupanca)}</h3>
-                </div>
+          {mensagemSucesso && (
+            <div className="comp-alerta comp-alerta-sucesso" role="alert" style={{ background: "#eef9f0", border: "1px solid #c3e6cb", color: "#155724", padding: "1rem", borderRadius: "8px", marginBottom: "1rem", display: "flex", gap: "0.75rem", alignItems: "center" }}>
+              <span aria-hidden="true">✓</span>
+              <div>{mensagemSucesso}</div>
+            </div>
+          )}
 
-            </section>
+          <form onSubmit={movimentar} className="comp-pilha">
+            <div className="comp-campo">
+              <label htmlFor="poupanca-input-valor" className="comp-campo-rotulo">
+                Valor para {operacao === "guardar" ? "guardar" : "resgatar"} (R$)
+              </label>
+              <div className="transferencia-valor-envoltorio">
+                <span className="transferencia-valor-prefixo" aria-hidden="true">R$</span>
+                <input
+                  id="poupanca-input-valor"
+                  className="comp-campo-input"
+                  inputMode="decimal"
+                  placeholder="0,00"
+                  value={valorTxt}
+                  onChange={(e) => setValorTxt(e.target.value)}
+                  autoComplete="off"
+                />
+              </div>
+              {/* Espaçamento aumentado entre os valores rápidos e o botão de submit */}
+              <div className="transferencia-valores-rapidos" aria-label="Valores rápidos" style={{ display: "flex", gap: "0.5rem", marginTop: "0.75rem", marginBottom: "2rem" }}>
+                {VALORES_RAPIDOS.map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    className="comp-chip"
+                    aria-pressed={valor === v}
+                    onClick={() => setValorTxt(v.toFixed(2).replace(".", ","))}
+                  >
+                    {formatarMoeda(v)}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-            {/* Área de movimentação */}
-            <section className="movimentacao-poupanca">
+            <button
+              type="submit"
+              className="comp-botao comp-botao-primario"
+              disabled={enviando}
+            >
+              {enviando
+                ? "Processando…"
+                : operacao === "guardar"
+                  ? "Guardar dinheiro"
+                  : "Resgatar dinheiro"}
+            </button>
+          </form>
 
-                <h3>Movimentar</h3>
-
-                <div className="botoes-operacao">
-
-                    <button
-                        type="button"
-                        className={`botao-operacao guardar ${operacao === "guardar" ? "selecionado" : ""}`}
-                        onClick={() => {
-                            setOperacao("guardar");
-                            setMensagemErro("");
-                            setMensagemSucesso("");
-                        }}
-                    >
-                        Guardar dinheiro
-                    </button>
-
-                    <button
-                        type="button"
-                        className={`botao-operacao resgatar ${operacao === "resgatar" ? "selecionado" : ""}`}
-                        onClick={() => {
-                            setOperacao("resgatar");
-                            setMensagemErro("");
-                            setMensagemSucesso("");
-                        }}
-                    >
-                        Retirar dinheiro
-                    </button>
-
-                </div>
-
-                <form onSubmit={movimentarDinheiro}>
-
-                    <label htmlFor="valor-poupanca">
-                        ◉ Valor (R$)
-                    </label>
-
-                    <input
-                        id="valor-poupanca"
-                        type="text"
-                        inputMode="decimal"
-                        placeholder="Digite o valor"
-                        value={valor}
-                        onChange={(e) => setValor(e.target.value)}
-                    />
-
-                    <button
-                        type="submit"
-                        className={`botao-movimentar ${operacao}`}
-                        disabled={carregando}
-                    >
-                        {carregando
-                            ? "Aguarde..."
-                            : operacao === "guardar"
-                                ? "♧ Guardar"
-                                : "↩ Retirar dinheiro"
-                        }
-                    </button>
-
-                </form>
-
-                {/* Mensagens */}
-                {mensagemErro && (
-                    <div className="mensagem-poupanca erro">
-                        ⚠️ {mensagemErro}
-                    </div>
-                )}
-
-                {mensagemSucesso && (
-                    <div className="mensagem-poupanca sucesso">
-                        ✓ {mensagemSucesso}
-                    </div>
-                )}
-
-            </section>
-
-            <footer className="rodape-poupanca">
-                🐾
-                <p>NekoPay — Sorte e prosperidade sempre.</p>
-            </footer>
-
-        </main>
-    );
+          <div className="comp-botoes-coluna" style={{ marginTop: "1.5rem" }}>
+            <Link to="/" className="comp-botao comp-botao-contorno">
+              Voltar ao início
+            </Link>
+          </div>
+        </>
+      )}
+    </LayoutPagina>
+  );
 }
