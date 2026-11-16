@@ -1,20 +1,42 @@
-import { Link } from "react-router-dom";
-import {useConta} from "../Services/api.js";
-import "./Login.css"
-import "./Cadastro.css"
-export default function login() {
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { contasService, entrarNaConta } from "../Services/api.js";
+import "./Login.css";
+import "./Cadastro.css";
 
-// ----- LOGIN  == CADASTRO DE >>NOVOS<<  USUARIOS!  -----
+export default function Login() {
+    const navigate = useNavigate();
+    const [documento, setDocumento] = useState("");
+    const [senha, setSenha] = useState("");
+    const [erro, setErro] = useState("");
+    const [enviando, setEnviando] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (enviando) return;
+        setErro("");
+        setEnviando(true);
+
+        try {
+            const conta = await contasService.login(documento, senha);
+            entrarNaConta(conta.id);
+            navigate("/");
+        } catch (err) {
+            setErro(err.message);
+        } finally {
+            setEnviando(false);
+        }
+    };
 
     return (
         <div className="cadastro-page">
 
-            <header className="cabecalho-cadastro">
-                <Link id="seta-voltar" to="/"> &lt; </Link>
-            </header>
+             <header className=" cabecalho-cadastro ">
+                 <Link id="seta-voltar" to="/"> &lt; </Link>
+             </header>
 
             <h2>Entrar</h2>
-            <p> Digite o documento da sua conta para acessar o NekoPay. </p>
+            <p> Digite o documento e a senha da sua conta para acessar o NekoPay. </p>
 
             <form id="login-formulario" onSubmit={handleSubmit} noValidate>
 
@@ -39,7 +61,21 @@ export default function login() {
                 />
                 <span className="login-dica">É o mesmo CPF ou CNPJ usado para abrir a conta.</span>
 
-                <button id="login-botao-entrar" className="btn-cadastrar" type="submit" disabled={enviando}>
+                {/* Espaçamento reduzido aqui */}
+                <label htmlFor="login-input-senha" style={{ marginTop: "0.5rem", display: "block" }}> Senha </label>
+                <input
+                    id="login-input-senha"
+                    className="form-input"
+                    name="senha"
+                    type="password"
+                    placeholder="Digite sua senha"
+                    autoComplete="current-password"
+                    value={senha}
+                    onChange={(e) => setSenha(e.target.value)}
+                    aria-invalid={Boolean(erro)}
+                />
+
+                <button id="login-botao-entrar" className="btn-cadastrar" type="submit" disabled={enviando} style={{ marginTop: "1.5rem" }}>
                     {enviando ? "Entrando…" : "Entrar"}
                 </button>
 
@@ -50,7 +86,7 @@ export default function login() {
             </div>
 
             <footer className="cadastro-footer">
-                &copy; Todos os direitos reservados por Tech Girls.
+                © Todos os direitos reservados por Tech Girls.
             </footer>
         </div>
     );
