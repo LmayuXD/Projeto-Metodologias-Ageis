@@ -1,20 +1,13 @@
-#seta-voltar {
-    text-decoration: none;
-    font-size: 50px;
-    font-weight: bolder;
-    line-height: 1;
-    display: inline-block;
-    color: #a8742b;
-}
+
 
 .cabecalho-cadastro{
 
-    position: absolute;
     top: 20px;
     left: 10px;
     width: auto;
-    padding: 0;
+    padding: 20px;
     z-index: 10;
+
 
 }
 
@@ -58,7 +51,7 @@ form {
     flex-direction: column;
 
     border: 2px solid #d9dfbd;
-    border-radius: 20px;
+    border-radius: 15px;
 
     background-color: #fffdf8;
     padding: 18px;

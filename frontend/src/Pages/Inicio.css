@@ -4,6 +4,10 @@
    Os resets abaixo existem porque o App.css global define estilos para
    p, h2, form e button que atrapalhariam estas páginas.
    --------------------------------------------------------------------- */
+#inicio-atalho-transferencia{
+    color: var(--rosa);
+
+}
 .layout-pagina {
     --texto-principal: #3d3a33;
     --oliva-escuro: #4f6137;
@@ -49,7 +53,7 @@
     padding: 0;
 }
 
-/* Cabeçalho: seta de voltar + logo à esquerda, hambúrguer à direita */
+/* Cabeçalho: logo à esquerda, hambúrguer (menu)  à direita */
 .layout-cabecalho {
     display: flex;
     align-items: center;
@@ -67,6 +71,7 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
+
 }
 
 .layout-marca-logo {

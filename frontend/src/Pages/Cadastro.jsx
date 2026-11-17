@@ -36,12 +36,13 @@ export default function Cadastro() {
 
     return (
         <div className="cadastro-page">
+
             <header className=" cabecalho-cadastro ">
-                <Link id="seta-voltar" to="/"> &lt; </Link>
+                
+                <h2>Abrir conta</h2>
+                <p>Preencha os dados abaixo para abrir a sua conta NekoPay.</p>
             </header>
 
-            <h2>Abrir conta</h2>
-            <p>Preencha os dados abaixo para abrir a sua conta NekoPay.</p>
 
             {erro && (
                 <div id="cadastro-erro" className="comp-alerta comp-alerta-erro" role="alert">

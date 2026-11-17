@@ -4,13 +4,13 @@
    ============================ */
 
 :root {
-  --creme: #fcf7e7;
+  --creme: #dbd1c3;
   --dourado: #f3c453;
   --terracota: #a8742b;
   --vermelho: #97271b;
   --verde-oliva: #9b955b;
   --bege: #f3e2c9;
-  --rosa: #f4bfbe;
+  --rosa: #d8120f;
   --marrom: #c47d20;
   --branco: #ffffff;
   --preto: #000000
@@ -24,7 +24,6 @@
 body {
   margin: 0;
   min-height: 100vh;
-
   display: flex;
   background-color: #fcf7e7;
   justify-content: center;
@@ -305,7 +304,7 @@ button{
   box-shadow: 0 5px 14px rgba(151, 39, 27, 0.18);
 }
 
-.comp-botao-suave { background: #f9dcdc; color: var(--vermelho); }
+.comp-botao-suave { background: #97271b;} /* botao transferir / caixinha / extrato / editar perfil*/
 .comp-botao-suave:hover:not(:disabled) { background: var(--rosa); }
 
 .comp-botao-contorno { background: transparent; color: var(--terracota); border: 1.5px solid #dccaa6; }

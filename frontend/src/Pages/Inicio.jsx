@@ -28,7 +28,7 @@ export default function Inicio() {
                 <h2> SEJA BEM-VINDO(A) </h2>
 
                 <Link className="botao-inicio" to={"/cadastro"}>
-                    <button>Cadastre-se </button>
+                    <button> Cadastre-se </button>
                 </Link>
                 <Link className="botao-inicio" to={"/login"}>
                     <button>Já tenho uma conta</button>

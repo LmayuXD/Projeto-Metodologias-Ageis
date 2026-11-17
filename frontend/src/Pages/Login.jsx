@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { contasService, entrarNaConta } from "../Services/api.js";
 import "./Login.css";
 import "./Cadastro.css";
-
+import "../../public/logonekopay.png"
 export default function Login() {
     const navigate = useNavigate();
     const [documento, setDocumento] = useState("");
@@ -31,12 +31,16 @@ export default function Login() {
     return (
         <div className="cadastro-page">
 
-             <header className=" cabecalho-cadastro ">
-                 <Link id="seta-voltar" to="/"> &lt; </Link>
-             </header>
 
-            <h2>Entrar</h2>
-            <p> Digite o documento e a senha da sua conta para acessar o NekoPay. </p>
+             <header className=" cabecalho-cadastro ">
+
+
+                 <img src={"../../public/logonekopay.png"}
+                          alt="Logo NekoPay"/>
+                 <h2>Entrar</h2>
+                 <p> Digite o documento e a senha da sua conta para acessar o NekoPay. </p>
+
+             </header>
 
             <form id="login-formulario" onSubmit={handleSubmit} noValidate>
 
@@ -59,7 +63,6 @@ export default function Login() {
                     onChange={(e) => setDocumento(e.target.value)}
                     aria-invalid={Boolean(erro)}
                 />
-                <span className="login-dica">É o mesmo CPF ou CNPJ usado para abrir a conta.</span>
 
                 {/* Espaçamento reduzido aqui */}
                 <label htmlFor="login-input-senha" style={{ marginTop: "0.5rem", display: "block" }}> Senha </label>
