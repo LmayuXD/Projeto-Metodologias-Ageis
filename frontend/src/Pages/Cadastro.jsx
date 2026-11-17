@@ -52,7 +52,7 @@ export default function Cadastro() {
 
             <form onSubmit={handleSubmit}>
 
-                <label>Nome</label>
+                <label> Nome</label>
                 <input
                     className="form-input"
                     name="nomeTitular"
@@ -61,7 +61,7 @@ export default function Cadastro() {
                     onChange={handleChange}
                 />
 
-                <label>nº Documento</label>
+                <label> N.º Documento</label>
                 <input
                     className="form-input"
                     name="documento"
@@ -70,7 +70,7 @@ export default function Cadastro() {
                     onChange={handleChange}
                 />
 
-                <label>Senha</label>
+                <label> Senha</label>
                 <input
                     className="form-input"
                     name="senha"

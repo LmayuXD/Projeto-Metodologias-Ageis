@@ -47,7 +47,7 @@ export default function Login() {
                     </div>
                 )}
 
-                <label htmlFor="login-input-documento"> nº Documento </label>
+                <label htmlFor="login-input-documento"> N.º Documento </label>
                 <input
                     id="login-input-documento"
                     className="form-input"
