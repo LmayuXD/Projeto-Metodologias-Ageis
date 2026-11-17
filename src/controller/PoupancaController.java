@@ -29,6 +29,11 @@ public class PoupancaController {
         this.contaController = contaController;
     }
 
+    // apaga a caixinha de uma conta encerrada
+    public synchronized void removerCaixinha(Long contaId) {
+        caixinhas.remove(contaId);
+    }
+
     public Poupanca consultar(Long contaId) {
         buscarConta(contaId);
         return caixinhas.computeIfAbsent(contaId, Poupanca::new);

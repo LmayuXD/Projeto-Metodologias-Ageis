@@ -18,7 +18,7 @@ public class ContaController {
 
         // Cria uma nova conta
         Conta novaConta = new Conta(
-                (long) (contas.size() + 1),
+                proximoId(),
                 nomeTitular,
                 documento,
                 senha
@@ -44,6 +44,17 @@ public class ContaController {
 
         contas.add(novaConta);
         return novaConta;
+    }
+
+    // Próximo id livre (maior id existente + 1), para não repetir ids após exclusões
+    private Long proximoId() {
+        long maior = 0;
+        for (Conta c : contas) {
+            if (c.getId() != null && c.getId() > maior) {
+                maior = c.getId();
+            }
+        }
+        return maior + 1;
     }
 
     // 1.1. LOGIN - Autenticar usuário por documento e senha

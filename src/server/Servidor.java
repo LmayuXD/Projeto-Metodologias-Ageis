@@ -93,6 +93,7 @@ public class Servidor {
     // GET  /api/contas        -> lista todas
     // GET  /api/contas/{id}   -> busca uma
     // PUT  /api/contas/{id}   -> atualiza nome, documento e senha
+    // DELETE /api/contas/{id} -> encerra a conta
     // GET  /api/contas/{id}/extrato[?tipo=PIX_ENVIADO|PIX_RECEBIDO] -> extrato, do mais recente ao mais antigo
     private static void rotaContas(HttpExchange ex, String metodo, String[] partes) throws Exception {
         boolean colecao = partes.length == 3;
@@ -124,6 +125,15 @@ public class Servidor {
                 responder(ex, 404, erro("Conta não encontrada"));
             } else {
                 responder(ex, 200, json.writeValueAsString(atualizada));
+            }
+
+        } else if (metodo.equals("DELETE") && item) {
+            Long id = Long.parseLong(partes[3]);
+            if (contaController.deletarConta(id)) {
+                poupancaController.removerCaixinha(id);
+                responder(ex, 200, json.writeValueAsString(Map.of("mensagem", "Conta encerrada")));
+            } else {
+                responder(ex, 404, erro("Conta não encontrada"));
             }
 
         } else if (metodo.equals("GET") && partes.length == 5 && partes[4].equals("extrato")) {
