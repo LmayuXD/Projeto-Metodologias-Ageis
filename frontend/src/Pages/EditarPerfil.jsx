@@ -17,7 +17,7 @@ import "./Editarperfil.css"
 // -----  PERFIL  == EXITE SALDO, NOME E FOTO DO USUARIO, CRUD DO PERFIL E BOTOES PARA DEPOSITAR OU GUARDAR O DINHEIRO
 // OU SAIR DA CONTA !! -----
 
-function validar(nome, documento) {
+function validar(nome, documento, senha) {
   const erros = {};
   const n = nome.trim();
   if (!n) erros.nome = "Informe o nome completo.";
@@ -32,6 +32,10 @@ function validar(nome, documento) {
     else if (digitos.length !== 11 && digitos.length !== 14)
       erros.documento = "CPF tem 11 dígitos e CNPJ tem 14.";
   }
+
+  const s = senha.trim();
+  if (!s) erros.senha = "Informe a senha";
+  else if (s.length < 8) erros.nome = "A senha deve ter pelo menos 8 caracteres.";
   return erros;
 }
 
@@ -42,6 +46,7 @@ export default function EditarPerfil() {
   const [editando, setEditando] = useState(false);
   const [nome, setNome] = useState("");
   const [documento, setDocumento] = useState("");
+  const [senha, setSenha] = useState("");
   const [erros, setErros] = useState({});
   const [salvando, setSalvando] = useState(false);
   const [aviso, setAviso] = useState(null); // { tipo: "sucesso" | "erro", texto }
@@ -95,18 +100,28 @@ export default function EditarPerfil() {
     }
   }
 
-  async function encerrarConta() {
-    setExcluindo(true);
-    setAviso(null);
-    try {
-      await requisicao(`/api/contas/${contaId}`, { method: "DELETE" });
-      sairDaConta();
-      navigate("/cadastro");
-    } catch (err) {
-      setAviso({ tipo: "erro", texto: err.message });
-      setExcluindo(false);
-    }
-  }
+    async function encerrarConta() {
+        setExcluindo(true);
+        setAviso(null);
+        try {
+          await requisicao(`/api/contas/${contaId}`, { method: "DELETE" });
+          sairDaConta();
+          navigate("/cadastro");
+        } catch (err) {
+          // Se a conta já não existe no servidor (ex: servidor reiniciado)
+          if (err.status === 404) {
+            sairDaConta();
+            setAviso({
+              tipo: "erro",
+              texto: "A sessão expirou ou a conta já não existe."
+            });
+            setTimeout(() => navigate("/cadastro"), 2000);
+          } else {
+            setAviso({ tipo: "erro", texto: err.message });
+            setExcluindo(false);
+          }
+        }
+      }
 
   function sair() {
     sairDaConta();
@@ -206,6 +221,10 @@ export default function EditarPerfil() {
                   <dt>Número da conta</dt>
                   <dd>{String(conta.id).padStart(6, "0")}</dd>
                 </div>
+                <div className="comp-detalhes-linha">
+                    <dt>Senha</dt>
+                    <dd>{conta.senha}</dd>
+                </div>
               </dl>
             ) : (
               <form id="perfil-formulario-edicao" onSubmit={salvar} noValidate className="comp-pilha">
@@ -241,6 +260,20 @@ export default function EditarPerfil() {
                       Este documento é a sua chave Pix. Alterá-lo muda a chave que outras pessoas usam para te pagar.
                     </span>
                   )}
+                </div>
+
+                <div className="comp-campo">
+                  <label htmlFor="perfil-input-senha" className="comp-campo-rotulo">Senha</label>
+                  <input
+                    id="perfil-input-senha"
+                    className="comp-campo-input"
+                    value={senha}
+                    onChange={(e) => setSenha(e.target.value)}
+                    autoComplete="senha"
+                    aria-invalid={Boolean(erros.senha)}
+                    aria-describedby={erros.senha ? "perfil-erro-senha" : undefined}
+                  />
+                  {erros.senha && <span id="perfil-erro-senha" className="comp-campo-erro">{erros.senha}</span>}
                 </div>
 
                 <div className="comp-botoes-par">

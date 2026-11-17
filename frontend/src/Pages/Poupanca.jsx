@@ -201,12 +201,6 @@ export default function Poupanca() {
                   : "Resgatar dinheiro"}
             </button>
           </form>
-
-          <div className="comp-botoes-coluna" style={{ marginTop: "1.5rem" }}>
-            <Link to="/" className="comp-botao comp-botao-contorno">
-              Voltar ao início
-            </Link>
-          </div>
         </>
       )}
     </LayoutPagina>
