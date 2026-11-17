@@ -61,6 +61,7 @@ export const pixService = {
 
 // ---------- Sessão (conta ativa neste navegador) ----------
 const CHAVE_SESSAO = "nekopay.contaId";
+const EVENTO_SAIDA = "nekopay:saida";
 
 export function lerContaId() {
     try { return localStorage.getItem(CHAVE_SESSAO) || null; } catch { return null; }
@@ -70,6 +71,8 @@ export function entrarNaConta(id) {
 }
 export function sairDaConta() {
     try { localStorage.removeItem(CHAVE_SESSAO); } catch { /* nada a fazer */ }
+    // avisa as telas já abertas (ex.: Início em "/") que a sessão acabou
+    window.dispatchEvent(new Event(EVENTO_SAIDA));
 }
 
 // backend: "saldoInicial" + extrato em outra rota; telas: conta.saldo e conta.extrato
@@ -84,6 +87,18 @@ export function useConta() {
     const [carregando, setCarregando] = useState(Boolean(contaId));
     const [erro, setErro] = useState("");
     const [tentativa, setTentativa] = useState(0);
+
+    // ao sair da conta, limpa o estado sem precisar trocar de rota
+    useEffect(() => {
+        const aoSair = () => {
+            setContaId(null);
+            setContaState(null);
+            setCarregando(false);
+            setErro("");
+        };
+        window.addEventListener(EVENTO_SAIDA, aoSair);
+        return () => window.removeEventListener(EVENTO_SAIDA, aoSair);
+    }, []);
 
     useEffect(() => {
         if (!contaId) return undefined;
