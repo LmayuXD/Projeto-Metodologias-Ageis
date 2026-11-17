@@ -2,16 +2,26 @@ package controller;
 
 import model.Conta;
 import model.Poupanca;
+import model.Transferencia;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 // guardar e resgatar dinheiro
 
 public class PoupancaController {
 
+    // ---------- Constantes exatamente iguais ao que o Front-end espera ----------
+    public static final String POUPANCA_GUARDAR = "POUPANCA_GUARDAR";
+    public static final String POUPANCA_RESGATE = "POUPANCA_RESGATE";
+
+    private static final double VALOR_MINIMO = 0.01;
+
+    // ---------- Dependências ----------
     private final ContaController contaController;
     private final Map<Long, Poupanca> caixinhas = new HashMap<>();
 
@@ -24,12 +34,11 @@ public class PoupancaController {
         return caixinhas.computeIfAbsent(contaId, Poupanca::new);
     }
 
-    public Poupanca guardar(Long contaID, double valor) {
+    public synchronized Poupanca guardar(Long contaId, double valor) {
 
         validarValor(valor);
-
-        Conta conta = buscarConta(contaID);
-        Poupanca caixinha = consultar(contaID);
+        Conta conta = buscarConta(contaId);
+        Poupanca caixinha = consultar(contaId);
 
         double saldo = arredondar(conta.getSaldoInicial());
         double valorValido = arredondar(valor);
@@ -40,21 +49,33 @@ public class PoupancaController {
             );
         }
 
-        conta.setSaldoInicial(
-                arredondar(saldo - valorValido)
+        // 1) Atualiza o saldo da conta
+        conta.setSaldoInicial(arredondar(saldo - valorValido));
+
+        // 2) Atualiza a caixinha
+        caixinha.depositar(valorValido);
+
+        // 3) Monta o registro de extrato (EXATAMENTE como o Pix faz)
+        String id = UUID.randomUUID().toString();
+        String data = LocalDateTime.now().toString();
+
+        Transferencia registroGuardado = new Transferencia(
+                id, "Caixinha NekoPay", valorValido, data,
+                "Guardado na caixinha", POUPANCA_GUARDAR
         );
 
-        caixinha.depositar(valorValido);
+        // 4) ADICIONA DIRETAMENTE NO EXTRATO DA CONTA (o segredo que faltava!)
+        conta.getExtrato().add(registroGuardado);
 
         return caixinha;
     }
 
-    public Poupanca resgatar(Long contaID, double valor) {
+    public synchronized Poupanca resgatar(Long contaId, double valor) {
 
         validarValor(valor);
 
-        Conta conta = buscarConta(contaID);
-        Poupanca caixinha = consultar(contaID);
+        Conta conta = buscarConta(contaId);
+        Poupanca caixinha = consultar(contaId);
 
         double valorValido = arredondar(valor);
 
@@ -64,39 +85,41 @@ public class PoupancaController {
             );
         }
 
+        // 1) Atualiza a caixinha
         caixinha.sacar(valorValido);
 
+        // 2) Atualiza o saldo da conta
         conta.setSaldoInicial(
                 arredondar(conta.getSaldoInicial() + valorValido)
         );
+
+        // 3) Monta o registro de extrato
+        String id = UUID.randomUUID().toString();
+        String data = LocalDateTime.now().toString();
+
+        Transferencia registroResgatado = new Transferencia(
+                id, "Caixinha NekoPay", valorValido, data,
+                "Resgatado da caixinha", POUPANCA_RESGATE
+        );
+
+        // 4) ADICIONA DIRETAMENTE NO EXTRATO DA CONTA
+        conta.getExtrato().add(registroResgatado);
 
         return caixinha;
     }
 
     private Conta buscarConta(Long contaID) {
-
         Conta conta = contaController.buscarPorId(contaID);
-
         if (conta == null) {
             throw new IllegalArgumentException(
                     "Conta não encontrada!"
             );
         }
-
         return conta;
     }
 
     private void validarValor(double valor) {
-
-        // rejeita NaN e infinito
-        if (!Double.isFinite(valor)) {
-            throw new IllegalArgumentException(
-                    "O valor deve ser maior que 0."
-            );
-        }
-
-        // rejeita zero e valores negativos
-        if (valor <= 0) {
+        if (!Double.isFinite(valor) || valor <= 0) {
             throw new IllegalArgumentException(
                     "O valor deve ser maior que 0."
             );
@@ -104,7 +127,6 @@ public class PoupancaController {
 
         BigDecimal valorDecimal = BigDecimal.valueOf(valor);
 
-        // rejeita valores menores que R$ 0,01
         if (valorDecimal.compareTo(
                 BigDecimal.valueOf(0.01)
         ) < 0) {
@@ -113,7 +135,6 @@ public class PoupancaController {
             );
         }
 
-        // rejeita valores com mais de duas casas decimais
         if (valorDecimal.scale() > 2) {
             throw new IllegalArgumentException(
                     "O valor deve possuir no máximo duas casas decimais."

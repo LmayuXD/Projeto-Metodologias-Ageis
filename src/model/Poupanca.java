@@ -3,12 +3,15 @@ package model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Poupanca {
     // dados da caixinha
 
     private final Long id; // mesmo ID da conta dona da poupança
     private double saldo;
+    private List<Transferencia> historico = new ArrayList<>();
 
     public Poupanca(Long id) {
         this.id = id;
@@ -43,4 +46,8 @@ public class Poupanca {
 
         return this.saldo;
     }
+
+    public List<Transferencia> getHistorico() { return historico; }
+    public void setHistorico(List<Transferencia> historico) { this.historico = historico; }
+
 }
