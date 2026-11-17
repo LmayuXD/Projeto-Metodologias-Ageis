@@ -35,7 +35,7 @@ function validar(nome, documento, senha) {
 
   const s = senha.trim();
   if (!s) erros.senha = "Informe a senha";
-  else if (s.length < 8) erros.nome = "A senha deve ter pelo menos 8 caracteres.";
+  else if (s.length < 8) erros.senha = "A senha deve ter pelo menos 8 caracteres.";
   return erros;
 }
 
@@ -67,6 +67,7 @@ export default function EditarPerfil() {
   function iniciarEdicao() {
     setNome(conta.nomeTitular);
     setDocumento(conta.documento);
+    setSenha(conta.senha ?? "");
     setErros({});
     setAviso(null);
     setEditando(true);
@@ -79,7 +80,7 @@ export default function EditarPerfil() {
 
   async function salvar(e) {
     e.preventDefault();
-    const e2 = validar(nome, documento);
+    const e2 = validar(nome, documento, senha);
     setErros(e2);
     if (Object.keys(e2).length > 0) return;
 
@@ -88,7 +89,7 @@ export default function EditarPerfil() {
     try {
       const atualizada = await requisicao(`/api/contas/${contaId}`, {
         method: "PUT",
-        body: JSON.stringify({ nomeTitular: nome.trim(), documento: documento.trim() }),
+        body: JSON.stringify({ nomeTitular: nome.trim(), documento: documento.trim(), senha }),
       });
       setConta(atualizada);
       setEditando(false);
@@ -129,7 +130,8 @@ export default function EditarPerfil() {
   }
 
   const semAlteracao =
-    conta && nome.trim() === conta.nomeTitular && documento.trim() === conta.documento;
+    conta && nome.trim() === conta.nomeTitular && documento.trim() === conta.documento &&
+    senha === (conta.senha ?? "");
 
   return (
     <LayoutPagina

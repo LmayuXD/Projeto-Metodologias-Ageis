@@ -92,6 +92,7 @@ public class Servidor {
     // POST /api/contas        -> cadastra
     // GET  /api/contas        -> lista todas
     // GET  /api/contas/{id}   -> busca uma
+    // PUT  /api/contas/{id}   -> atualiza nome, documento e senha
     // GET  /api/contas/{id}/extrato[?tipo=PIX_ENVIADO|PIX_RECEBIDO] -> extrato, do mais recente ao mais antigo
     private static void rotaContas(HttpExchange ex, String metodo, String[] partes) throws Exception {
         boolean colecao = partes.length == 3;
@@ -111,6 +112,18 @@ public class Servidor {
                 responder(ex, 404, erro("Conta não encontrada"));
             } else {
                 responder(ex, 200, json.writeValueAsString(conta));
+            }
+
+        } else if (metodo.equals("PUT") && item) {
+            CadastroRequest req = json.readValue(ex.getRequestBody(), CadastroRequest.class);
+            Long id = Long.parseLong(partes[3]);
+            // Conta temporária (id fictício) só para validar e carregar os novos dados
+            Conta dados = new Conta(1L, req.nomeTitular(), req.documento(), req.senha());
+            Conta atualizada = contaController.atualizarConta(id, dados);
+            if (atualizada == null) {
+                responder(ex, 404, erro("Conta não encontrada"));
+            } else {
+                responder(ex, 200, json.writeValueAsString(atualizada));
             }
 
         } else if (metodo.equals("GET") && partes.length == 5 && partes[4].equals("extrato")) {
