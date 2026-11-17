@@ -34,9 +34,10 @@ public class ContaController {
             throw new IllegalArgumentException("O documento (CPF/CNPJ) é obrigatório!");
         }
 
-        // ATEMÇAO EMELI-DA-VÂ E LETICIA SHSUHUSJI !!!!!!!!!!!!!!!!!
-        //Documento duplicado: um banco normalmente não permite dois
-        //cadastros com o mesmo CPF/CNPJ. Vale validar isso no criarConta.
+        // Documento duplicado: não permite dois cadastros com o mesmo CPF/CNPJ
+        if (buscarPorDocumento(novaConta.getDocumento()) != null) {
+            throw new IllegalArgumentException("Já existe uma conta cadastrada com este CPF/CNPJ!");
+        }
 
         // Define o saldo inicial da conta
         novaConta.setSaldoInicial(saldoInicial);
@@ -99,6 +100,14 @@ public class ContaController {
             Conta contaExistente = contas.get(i);
 
             if (contaExistente.getId() != null && contaExistente.getId().equals(id)) {
+
+                // Documento duplicado: outra conta (diferente desta) já usa o mesmo CPF/CNPJ
+                if (contaAtualizada.getDocumento() != null) {
+                    Conta outra = buscarPorDocumento(contaAtualizada.getDocumento());
+                    if (outra != null && !outra.getId().equals(id)) {
+                        throw new IllegalArgumentException("Já existe uma conta cadastrada com este CPF/CNPJ!");
+                    }
+                }
 
                 // Atualiza os dados da conta encontrada
                 if (contaAtualizada.getNomeTitular() != null) {
