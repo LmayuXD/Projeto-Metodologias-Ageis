@@ -173,24 +173,6 @@ export default function EditarPerfil() {
               </div>
             </div>
 
-            <div id="perfil-cartao-saldo" className="comp-cartao comp-cartao-saldo">
-              <div className="comp-saldo-rotulo">
-                <span>Saldo da conta</span>
-                <button
-                  type="button"
-                  id="perfil-botao-saldo-visibilidade"
-                  className="layout-botao-icone perfil-botao-saldo-visibilidade"
-                  aria-label={saldoVisivel ? "Ocultar saldo" : "Mostrar saldo"}
-                  aria-pressed={!saldoVisivel}
-                  onClick={() => setSaldoVisivel((v) => !v)}
-                >
-                  {saldoVisivel ? "👁" : "🙈"}
-                </button>
-              </div>
-              <p id="perfil-saldo-valor" className="comp-saldo-valor">
-                {saldoVisivel ? formatarMoeda(conta.saldo) : "R$ ••••••"}
-              </p>
-            </div>
           </section>
 
           {/* ---------- Dados pessoais (visualizar / editar) ---------- */}
