@@ -14,8 +14,13 @@
   --marrom: #c47d20;
   --branco: #ffffff;
   --preto: #000000;
-  /* Fonte única do app (a mesma que o rodapé já usava) */
-  --fonte: "Sans Serif Collection", "Times New Roman", serif;
+  /* Botões principais: começam cremes e ficam rosa ao passar o mouse */
+  --botao-creme: #f3e2c9;
+  --botao-rosa: #f7c4d0;
+  --botao-texto: #7e2118;
+  --rosa: #f4bfbe;
+  /* Fonte única do app (Nunito, carregada em index.html) */
+  --fonte: "Nunito", "Segoe UI", Arial, sans-serif;
 
 }
 
@@ -32,6 +37,10 @@ body {
   justify-content: center;
   align-items: center;
 
+}
+
+#root {
+  width: 100%;
 }
 
 h2{
@@ -68,8 +77,8 @@ button{
   min-height: 51px;
   margin-top: 5px;
   padding: 14px 20px;
-  color: var(--vermelho);
-  background-color: var(--vermelho);
+  color: var(--botao-texto);
+  background-color: var(--botao-creme);
   border: none;
   border-radius: 999px;
   font-size: 15px;
@@ -85,8 +94,15 @@ button{
   flex-direction: column;
 }
 
+.botao-inicio button {
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
 .botao-inicio:hover {
-  background-color: #7e2118;
+  background-color: var(--botao-rosa);
   box-shadow: 0 5px 14px rgba(151, 39, 27, 0.18);
   transform: translateY(-1px);
 }
@@ -308,20 +324,20 @@ button{
 .comp-botao:focus-visible { outline: 3px solid var(--dourado); outline-offset: 3px; }
 .comp-botao:disabled { cursor: not-allowed; opacity: 0.55; transform: none; }
 
-.comp-botao-primario { background: var(--vermelho); color: var(--creme); }
+.comp-botao-primario { background: var(--botao-creme); color: var(--botao-texto); }
 .comp-botao-primario:hover:not(:disabled) {
-  background: #7e2118;
+  background: var(--botao-rosa);
   box-shadow: 0 5px 14px rgba(151, 39, 27, 0.18);
 }
 
-.comp-botao-suave { background: #97271b;} /* botao transferir / caixinha / extrato / editar perfil*/
-.comp-botao-suave:hover:not(:disabled) { background: var(--rosa); }
+.comp-botao-suave { background: var(--bege);} /* botao transferir / caixinha / extrato / editar perfil*/
+.comp-botao-suave:hover:not(:disabled) { background: var(--creme); }
 
 .comp-botao-contorno { background: transparent; color: var(--terracota); border: 1.5px solid #dccaa6; }
 .comp-botao-contorno:hover:not(:disabled) { background: rgba(243, 226, 201, 0.5); }
 
 .comp-botao-perigo { background: transparent; color: var(--vermelho); border: 1.5px solid var(--rosa); }
-.comp-botao-perigo:hover:not(:disabled) { background: #fbe5e3; }
+.comp-botao-perigo:hover:not(:disabled) { background: #efa8a8; }
 
 .comp-botao-pequeno { width: auto; min-height: 40px; padding: 8px 16px; font-size: 14px; }
 
@@ -437,8 +453,8 @@ button{
   padding: 6px 14px;
   border: 1.5px solid #dccaa6;
   border-radius: 999px;
-  background: transparent;
-  color: var(--terracota);
+  background: var(--botao-creme);
+  color: var(--botao-texto);
   font: inherit;
   font-size: 14px;
   font-weight: 600;
@@ -446,12 +462,12 @@ button{
   transition: background-color 0.15s ease;
 }
 
-.comp-chip:hover { background: rgba(243, 226, 201, 0.6); }
+.comp-chip:hover { background: var(--botao-rosa); }
 .comp-chip:focus-visible { outline: 3px solid var(--dourado); outline-offset: 2px; }
 .comp-chip[aria-pressed="true"] {
-  background: var(--vermelho);
-  border-color: var(--vermelho);
-  color: var(--creme);
+  background: var(--botao-rosa);
+  border-color: #e59db0;
+  color: var(--botao-texto);
 }
 
 

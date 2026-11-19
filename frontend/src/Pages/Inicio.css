@@ -4,10 +4,6 @@
    Os resets abaixo existem porque o App.css global define estilos para
    p, h2, form e button que atrapalhariam estas páginas.
    --------------------------------------------------------------------- */
-#inicio-atalho-transferencia{
-    color: var(--rosa);
-
-}
 .layout-pagina {
     --texto-principal: #3d3a33;
     --oliva-escuro: #4f6137;
@@ -17,7 +13,7 @@
     --sucesso-fundo: #eef0df;
 
     width: 100%;
-    max-width: 440px;
+    max-width: 440px; /* largura de celular */
     min-height: 100vh;
     margin: 0 auto;
     align-self: stretch;
@@ -28,7 +24,7 @@
 
     font-family: var(--fonte);
     color: var(--texto-principal);
-    background-color: var(--creme);
+    background-color: transparent; /* o fundo vem do body, sem listra */
     text-align: left;
 }
 
@@ -78,12 +74,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 46px;
-    height: 40px;
-    padding: 3px 4px;
-    border: 2px solid var(--vermelho);
-    border-radius: 12px;
-    background: var(--branco);
+    width: 72px;
+    height: 52px;
 }
 
 .layout-marca-img {
@@ -92,6 +84,7 @@
     height: 100%;
     max-width: none;
     object-fit: contain;
+    filter: drop-shadow(0 2px 3px rgba(112, 52, 0, 0.25));
 }
 
 .layout-marca-nome {
@@ -235,8 +228,14 @@
 .inicio-boas-vindas {
     width: 100%;
     max-width: 360px;
+    margin: 0 auto;
     padding: 24px 16px;
     text-align: center;
+}
+
+.inicio-boas-vindas h2 {
+    font-size: 26px;
+    margin-bottom: 18px;
 }
 
 .inicio-boas-vindas-logo {

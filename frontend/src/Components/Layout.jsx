@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { sairDaConta } from "../Services/api.js";
+import { Icone } from "./Icones.jsx";
 import logoNekoPay from "../assets/logo-nekopay.png";
 // Pedaços de tela compartilhados (cabeçalho, menu lateral e estados de carregamento/erro).
 // Estilos: App.css, blocos "layout-*", "estado-*" e "comp-*".
 
 const ITENS_DO_MENU = [
-  { to: "/", rotulo: "Início", icone: "🏠", id: "layout-menu-item-inicio" },
-  { to: "/transferencia", rotulo: "Transferência", icone: "⇄", id: "layout-menu-item-transferencia" },
-  { to: "/poupanca", rotulo: "Poupança", icone: "🐖", id: "layout-menu-item-poupanca" },
-  { to: "/extrato", rotulo: "Extrato", icone: "🧾", id: "layout-menu-item-extrato" },
-  { to: "/editarperfil", rotulo: "Editar Perfil", icone: "👤", id: "layout-menu-item-perfil" },
+  { to: "/", rotulo: "Início", icone: "inicio", id: "layout-menu-item-inicio" },
+  { to: "/transferencia", rotulo: "Transferência", icone: "transferencia", id: "layout-menu-item-transferencia" },
+  { to: "/poupanca", rotulo: "Poupança", icone: "poupanca", id: "layout-menu-item-poupanca" },
+  { to: "/extrato", rotulo: "Extrato", icone: "extrato", id: "layout-menu-item-extrato" },
+  { to: "/editarperfil", rotulo: "Editar Perfil", icone: "perfil", id: "layout-menu-item-perfil" },
 ];
 
 export function LayoutPagina({ idPagina, titulo, subtitulo, voltarPara, children }) {
@@ -45,7 +46,7 @@ export function LayoutPagina({ idPagina, titulo, subtitulo, voltarPara, children
               className="layout-botao-icone"
               aria-label="Voltar"
             >
-              ‹
+              <Icone nome="voltar" />
             </Link>
           )}
           <Link to="/" id="layout-marca" className="layout-marca" aria-label="NekoPay - ir para o início">
@@ -63,7 +64,7 @@ export function LayoutPagina({ idPagina, titulo, subtitulo, voltarPara, children
           aria-expanded={menuAberto}
           onClick={() => setMenuAberto(true)}
         >
-          ☰
+          <Icone nome="menu" />
         </button>
       </header>
 
@@ -91,7 +92,7 @@ export function LayoutPagina({ idPagina, titulo, subtitulo, voltarPara, children
                 aria-label="Fechar menu"
                 onClick={() => setMenuAberto(false)}
               >
-                ✕
+                <Icone nome="fechar" />
               </button>
             </div>
 
@@ -106,14 +107,14 @@ export function LayoutPagina({ idPagina, titulo, subtitulo, voltarPara, children
                       "layout-menu-item" + (isActive ? " layout-menu-item-ativo" : "")
                     }
                   >
-                    <span aria-hidden="true">{item.icone}</span>
+                    <Icone nome={item.icone} />
                     {item.rotulo}
                   </NavLink>
                 </li>
               ))}
               <li>
                 <button type="button" id="layout-menu-item-sair" className="layout-menu-item" onClick={sair}>
-                  <span aria-hidden="true">↩</span>
+                  <Icone nome="sair" />
                   Sair
                 </button>
               </li>

@@ -115,8 +115,8 @@
     min-height: 51px;
     margin-top: 18px;
     padding: 14px 20px;
-    color: var(--branco);
-    background-color: var(--vermelho);
+    color: var(--botao-texto);
+    background-color: var(--botao-creme);
     border: none;
     border-radius: 12px;
     font-size: 16px;
@@ -126,8 +126,8 @@
 }
 
 .btn-cadastrar:hover:not(:disabled) {
-    background-color: #7e2118;
-    box-shadow: 0 5px 14px rgba(151, 39, 27, 0.25);
+    background-color: var(--botao-rosa);
+    box-shadow: 0 5px 14px rgba(151, 39, 27, 0.18);
     transform: translateY(-1px);
 }
 

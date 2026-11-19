@@ -16,14 +16,17 @@
     padding: 8px 12px;
     border: 0;
     border-radius: 12px;
-    background: #f9dcdc;
-    color: var(--vermelho);
+    background: var(--botao-creme);
+    color: var(--botao-texto);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
     font: inherit;
     font-size: 14px;
     font-weight: 600;
 }
 
-.transferencia-aba[aria-selected="true"] { background: var(--vermelho); color: var(--creme); }
+.transferencia-aba:hover:not(:disabled) { background: var(--botao-rosa); }
+.transferencia-aba[aria-selected="true"] { background: var(--botao-rosa); color: var(--botao-texto); }
 .transferencia-aba:disabled { background: #efe8d8; color: #a79d89; cursor: not-allowed; }
 
 .transferencia-aba-selo {

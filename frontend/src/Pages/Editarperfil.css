@@ -47,3 +47,12 @@
 .perfil-encerrar-titulo { color: var(--vermelho); }
 .perfil-encerrar-explicacao { font-size: 12px; color: #82796d; }
 
+
+/* Botão de confirmar o encerramento da conta continua vermelho */
+#perfil-botao-confirmar-encerramento {
+    background: var(--vermelho);
+    color: var(--branco);
+}
+#perfil-botao-confirmar-encerramento:hover:not(:disabled) {
+    background: #7e2118;
+}
