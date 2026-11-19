@@ -4,6 +4,7 @@ import { useConta, formatarMoeda } from "../Services/api.js";
 import { LayoutPagina, Carregando, ErroCarregar } from "../Components/Layout.jsx";
 // Estilos: App.css, blocos "comp-*" (compartilhados) e "inicio-*" (desta página).
 
+import logoNekoPay from "../assets/logo-nekopay.png";
 import "./Inicio.css"
 
 // ----- INICIO == PERGUNTA SE O USUARIO DESEJA CRIAR OU ENTRAR EM UMA CONTA EXISTENTE  -----
@@ -24,7 +25,8 @@ export default function Inicio() {
     // Sem conta ativa neste navegador: tela de boas-vindas
     if (!contaId) {
         return (
-            <div>
+            <div className="inicio-boas-vindas">
+                <img className="inicio-boas-vindas-logo" src={logoNekoPay} alt="Logo NekoPay" />
                 <h2> SEJA BEM-VINDO(A) </h2>
 
                 <Link className="botao-inicio" to={"/cadastro"}>

@@ -13,7 +13,9 @@
   --rosa: #d8120f;
   --marrom: #c47d20;
   --branco: #ffffff;
-  --preto: #000000
+  --preto: #000000;
+  /* Fonte única do app (a mesma que o rodapé já usava) */
+  --fonte: "Sans Serif Collection", "Times New Roman", serif;
 
 }
 
@@ -23,6 +25,7 @@
 
 body {
   margin: 0;
+  font-family: var(--fonte);
   min-height: 100vh;
   display: flex;
   background-color: #fcf7e7;
@@ -32,7 +35,7 @@ body {
 }
 
 h2{
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: var(--fonte);
   color: #4f6137;
   font-size: 35px;
   margin-top: 0;
@@ -42,9 +45,16 @@ h2{
 p{
   margin-top: 0;
   margin-bottom: 100px;
-  font-family: "Sans Serif Collection"  ;
+  font-family: var(--fonte);
 }
 
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
 
 button{
   background-color: var(--vermelho);

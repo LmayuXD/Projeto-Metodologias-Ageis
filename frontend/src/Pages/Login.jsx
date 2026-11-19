@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { contasService, entrarNaConta } from "../Services/api.js";
 import "./Login.css";
 import "./Cadastro.css";
-import "../../public/logonekopay.png"
+import logoNekoPay from "../assets/logo-nekopay.png";
+
 export default function Login() {
     const navigate = useNavigate();
     const [documento, setDocumento] = useState("");
@@ -30,19 +31,13 @@ export default function Login() {
 
     return (
         <div className="cadastro-page">
+            <header className="cabecalho-cadastro">
+                <img className="auth-logo" src={logoNekoPay} alt="Logo NekoPay" />
+                <h2>Entrar</h2>
+                <p>Digite o documento e a senha da sua conta para acessar o NekoPay.</p>
+            </header>
 
-
-             <header className=" cabecalho-cadastro ">
-
-
-                 <img src={"../../public/logonekopay.png"}
-                          alt="Logo NekoPay"/>
-                 <h2>Entrar</h2>
-                 <p> Digite o documento e a senha da sua conta para acessar o NekoPay. </p>
-
-             </header>
-
-            <form id="login-formulario" onSubmit={handleSubmit} noValidate>
+            <form id="login-formulario" className="auth-form" onSubmit={handleSubmit} noValidate>
 
                 {erro && (
                     <div id="login-erro" className="comp-alerta comp-alerta-erro" role="alert">
@@ -65,7 +60,7 @@ export default function Login() {
                 />
 
                 {/* Espaçamento reduzido aqui */}
-                <label htmlFor="login-input-senha" style={{ marginTop: "0.5rem", display: "block" }}> Senha </label>
+                <label htmlFor="login-input-senha"> Senha </label>
                 <input
                     id="login-input-senha"
                     className="form-input"
@@ -78,7 +73,7 @@ export default function Login() {
                     aria-invalid={Boolean(erro)}
                 />
 
-                <button id="login-botao-entrar" className="btn-cadastrar" type="submit" disabled={enviando} style={{ marginTop: "1.5rem" }}>
+                <button id="login-botao-entrar" className="btn-cadastrar" type="submit" disabled={enviando}>
                     {enviando ? "Entrando…" : "Entrar"}
                 </button>
 

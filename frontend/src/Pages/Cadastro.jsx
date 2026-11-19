@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { contasService, entrarNaConta } from "../Services/api.js";
+import logoNekoPay from "../assets/logo-nekopay.png";
 import "./Cadastro.css";
 
 // ----- CADASTRO = FORMULARIO QUE PEDE NOME, DOCUMENTO E SENHA DO NOVO USUARIO -----
@@ -37,8 +38,8 @@ export default function Cadastro() {
     return (
         <div className="cadastro-page">
 
-            <header className=" cabecalho-cadastro ">
-                
+            <header className="cabecalho-cadastro">
+                <img className="auth-logo" src={logoNekoPay} alt="Logo NekoPay" />
                 <h2>Abrir conta</h2>
                 <p>Preencha os dados abaixo para abrir a sua conta NekoPay.</p>
             </header>
@@ -51,30 +52,36 @@ export default function Cadastro() {
                 </div>
             )}
 
-            <form onSubmit={handleSubmit}>
+            <form className="auth-form" onSubmit={handleSubmit}>
 
-                <label> Nome</label>
+                <label htmlFor="cadastro-input-nome">Nome</label>
                 <input
+                    id="cadastro-input-nome"
                     className="form-input"
                     name="nomeTitular"
+                    autoComplete="name"
                     placeholder="Nome completo"
                     value={form.nomeTitular}
                     onChange={handleChange}
                 />
 
-                <label> N.º Documento</label>
+                <label htmlFor="cadastro-input-documento">N.º Documento</label>
                 <input
+                    id="cadastro-input-documento"
                     className="form-input"
                     name="documento"
+                    inputMode="numeric"
                     placeholder="CPF ou CNPJ"
                     value={form.documento}
                     onChange={handleChange}
                 />
 
-                <label> Senha</label>
+                <label htmlFor="cadastro-input-senha">Senha</label>
                 <input
+                    id="cadastro-input-senha"
                     className="form-input"
                     name="senha"
+                    autoComplete="new-password"
                     type="password"
                     placeholder="Mínimo de 8 caracteres"
                     value={form.senha}

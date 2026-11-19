@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { sairDaConta } from "../Services/api.js";
+import logoNekoPay from "../assets/logo-nekopay.png";
 // Pedaços de tela compartilhados (cabeçalho, menu lateral e estados de carregamento/erro).
 // Estilos: App.css, blocos "layout-*", "estado-*" e "comp-*".
 
@@ -48,7 +49,9 @@ export function LayoutPagina({ idPagina, titulo, subtitulo, voltarPara, children
             </Link>
           )}
           <Link to="/" id="layout-marca" className="layout-marca" aria-label="NekoPay - ir para o início">
-            <span className="layout-marca-logo" aria-hidden="true">🐱</span>
+            <span className="layout-marca-logo" aria-hidden="true">
+                  <img src={logoNekoPay} alt="" className="layout-marca-img" />
+                </span>
             <span className="layout-marca-nome">NekoPay</span>
           </Link>
         </div>
@@ -76,7 +79,9 @@ export function LayoutPagina({ idPagina, titulo, subtitulo, voltarPara, children
           >
             <div className="layout-menu-topo">
               <span className="layout-marca">
-                <span className="layout-marca-logo" aria-hidden="true">🐱</span>
+                <span className="layout-marca-logo" aria-hidden="true">
+                  <img src={logoNekoPay} alt="" className="layout-marca-img" />
+                </span>
                 <span className="layout-marca-nome">NekoPay</span>
               </span>
               <button
